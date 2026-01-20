@@ -1,0 +1,107 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+// Gameplay media (screenshots and YouTube videos)
+const gameplayMedia = [
+	// Example entries - replace with actual content
+	// { type: 'youtube', id: 'VIDEO_ID', title: 'Gameplay Trailer' },
+	// { type: 'image', src: '/images/gameplay/screenshot1.jpg', alt: 'Combat scene' },
+];
+
+// Artwork images
+const artworkImages = [
+	// Example entries - replace with actual content
+	// { src: '/images/artwork/concept1.jpg', alt: 'Character concept art', title: 'Anna Lam Concept' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Gallery - ${SITE_TITLE}`} description="Gameplay footage and artwork from EIDOLWARE" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="text-center py-12 mb-12 border-b-2 border-cyber-purple">
+				<h1 class="text-6xl mb-4">Gallery</h1>
+				<p class="text-xl text-cyber-gray m-0">Visual showcase of EIDOLWARE</p>
+			</section>
+
+			<!-- Gameplay Section -->
+			<section class="my-16">
+				<h2 class="text-3xl mb-8 pb-4 border-b border-cyber-purple">Gameplay</h2>
+				{gameplayMedia.length > 0 ? (
+					<div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-8">
+						{gameplayMedia.map((media) => (
+							<div class="bg-black/50 border border-cyber-purple rounded-lg overflow-hidden transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+								{media.type === 'youtube' ? (
+									<div class="relative w-full" style="padding-bottom: 56.25%;">
+										<iframe
+											class="absolute top-0 left-0 w-full h-full"
+											src={`https://www.youtube.com/embed/${media.id}`}
+											title={media.title}
+											frameborder="0"
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+											allowfullscreen
+										></iframe>
+									</div>
+								) : (
+									<img src={media.src} alt={media.alt} class="w-full h-auto" />
+								)}
+								{media.title && (
+									<div class="p-4">
+										<p class="text-cyber-cyan font-semibold m-0">{media.title}</p>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				) : (
+					<div class="text-center p-12 bg-black/30 border border-dashed border-cyber-purple rounded-lg">
+						<p class="text-xl text-cyber-gray m-0 italic">Gameplay footage coming soon...</p>
+					</div>
+				)}
+			</section>
+
+			<!-- Artwork Section -->
+			<section class="my-16">
+				<h2 class="text-3xl mb-8 pb-4 border-b border-cyber-purple">Artwork</h2>
+				{artworkImages.length > 0 ? (
+					<div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-8">
+						{artworkImages.map((artwork) => (
+							<div class="bg-black/50 border border-cyber-purple rounded-lg overflow-hidden transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+								<img src={artwork.src} alt={artwork.alt} class="w-full h-auto" />
+								{artwork.title && (
+									<div class="p-4">
+										<p class="text-cyber-cyan font-semibold m-0">{artwork.title}</p>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				) : (
+					<div class="text-center p-12 bg-black/30 border border-dashed border-cyber-purple rounded-lg">
+						<p class="text-xl text-cyber-gray m-0 italic">Artwork coming soon...</p>
+					</div>
+				)}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	@media (max-width: 720px) {
+		.text-6xl {
+			font-size: 2.5rem !important;
+		}
+
+		.grid {
+			grid-template-columns: 1fr !important;
+		}
+	}
+</style>

@@ -241,32 +241,11 @@ const isAntagonist = character.type === 'antagonist';
 		color: rgb(var(--gray-dark));
 		line-height: 1.8;
 		font-size: 1.1rem;
-		margin: 0;
+		margin: 0 0 1.5rem 0;
 	}
 
-	.abilities-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-	}
-
-	.abilities-list li {
-		padding: 1rem 1.5rem;
-		background-color: rgba(109, 31, 104, 0.2);
-		border-left: 3px solid var(--cyan);
-		border-radius: 4px;
-		color: rgb(var(--gray-dark));
-		line-height: 1.6;
-	}
-
-	.abilities-list li strong {
-		color: var(--cyan);
-		display: block;
-		margin-bottom: 0.25rem;
-		font-size: 1.05rem;
+	.info-section p:last-child {
+		margin-bottom: 0;
 	}
 
 	@media (max-width: 1024px) {

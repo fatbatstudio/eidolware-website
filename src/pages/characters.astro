@@ -16,7 +16,7 @@ import { protagonists, antagonists } from '../data/characters';
 		<main>
 			<section class="text-center py-12 mb-12 border-b-2 border-cyber-purple">
 				<h1 class="text-6xl mb-4">Characters</h1>
-				<p class="text-xl text-cyber-gray m-0">The players in this twisted digital convention</p>
+				<p class="text-xl text-cyber-gray m-0">The characters in this twisted convention</p>
 			</section>
 
 			<section class="my-16">
@@ -36,7 +36,11 @@ import { protagonists, antagonists } from '../data/characters';
 							<div>
 								<h3 class="text-2xl mb-2 text-cyber-cyan">{character.name}</h3>
 								<p class="text-sm text-cyber-cyan uppercase tracking-widest mb-4 font-semibold">{character.role}</p>
-								<p class="text-cyber-gray-dark leading-relaxed m-0">{character.description}</p>
+								<div class="text-cyber-gray-dark leading-relaxed">
+									{character.description.split('\n\n').map((paragraph: string) => (
+										<p class="mb-4 last:mb-0">{paragraph}</p>
+									))}
+								</div>
 							</div>
 						</a>
 					))}
@@ -65,7 +69,11 @@ import { protagonists, antagonists } from '../data/characters';
 							<div>
 								<h3 class="text-2xl mb-2 text-[#ff4444]">{character.name}</h3>
 								<p class="text-sm text-[#ff8888] uppercase tracking-widest mb-4 font-semibold">{character.role}</p>
-								<p class="text-cyber-gray-dark leading-relaxed m-0">{character.description}</p>
+								<div class="text-cyber-gray-dark leading-relaxed">
+									{character.description.split('\n\n').map((paragraph: string) => (
+										<p class="mb-4 last:mb-0">{paragraph}</p>
+									))}
+								</div>
 							</div>
 						</a>
 					))}

@@ -20,12 +20,12 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<section class="text-center py-16 mb-12">
-				<h1 class="hero-title text-6xl mb-4">EIDOLWARE</h1>
+				<h1 class="hero-title text-6xl mb-4">[EIDOLWARE]</h1>
 				<p class="text-xl text-cyber-gray-dark mb-8 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
 				<div class="flex gap-4 justify-center flex-wrap">
-					<a href="https://fatbatstudio.itch.io/eidolware" target="_blank" rel="noopener noreferrer" class="group relative px-8 py-4 rounded-lg font-semibold uppercase tracking-widest transition-all duration-300 text-base bg-gradient-to-br from-cyber-purple to-cyber-purple-dark text-cyber-cyan border-2 border-cyber-purple overflow-hidden hover:shadow-glow-purple hover:-translate-y-0.5 hover:border-cyber-cyan">
-						<span class="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-cyber-cyan/30 to-transparent animate-[shine_3s_infinite]"></span>
-						Follow on itch.io
+					<a href="https://fatbatstudio.itch.io/eidolware" target="_blank" rel="noopener noreferrer" class="group relative px-8 py-4 rounded-lg font-semibold uppercase tracking-widest transition-all duration-300 text-base bg-cyber-purple text-cyber-cyan border-2 border-cyber-purple overflow-hidden hover:shadow-glow-purple hover:-translate-y-0.5 hover:border-cyber-cyan">
+						<span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[shine_3s_infinite]"></span>
+						<span class="relative z-10">Follow on itch.io</span>
 					</a>
 					<a href="#" class="px-8 py-4 rounded-lg font-semibold uppercase tracking-widest transition-all duration-300 text-base bg-transparent text-[#66c0f4] border-2 border-[#1b2838] hover:shadow-[0_0_20px_rgba(102,192,244,0.2)] hover:-translate-y-0.5 hover:border-[#66c0f4] hover:bg-[#66c0f4]/5" title="Coming Soon">
 						Steam Coming Soon
@@ -39,7 +39,7 @@ const posts = (await getCollection('blog')).sort(
 			<section class="my-12 p-8 bg-black/50 border border-cyber-purple rounded-lg box-border">
 				<h2 class="mt-0 text-3xl">About the Game</h2>
 				<p class="text-lg leading-relaxed font-bold">
-					Infiltrate a 24/7 anime convention where holograms are real, influencers reign supreme, and cosplay culture has gone completely off the rails in this satirical action-RPG by FATBAT Studio.
+					Infiltrate a 24/7 anime convention where holograms are real, influencers reign supreme, and Otaku culture has gone completely off the rails in this satirical action-RPG by FATBAT Studio.
 				</p>
 				<p class="text-lg leading-relaxed">
 					You are Anna Lam, a former AI engineer. The mysterious death of your mentor has led you to a newly established 24-hour anime convention, owned and operated by a crypto-billionaire who styles himself "Fedora Mask".
@@ -60,7 +60,7 @@ const posts = (await getCollection('blog')).sort(
 					<div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-8">
 						{posts.map((post) => (
 							<article class="p-6 bg-black/50 border border-cyber-purple rounded-lg transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(177,255,236,0.2)] hover:-translate-y-0.5">
-								<a href={`/blog/${post.slug}/`} class="no-underline text-inherit">
+								<a href={`/blog/${post.id}/`} class="no-underline text-inherit">
 									<h3 class="text-xl mb-2 text-cyber-cyan">{post.data.title}</h3>
 									<time class="text-sm text-cyber-gray block mb-3">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
 									<p class="text-cyber-gray-dark leading-relaxed m-0">{post.data.description}</p>
@@ -82,8 +82,8 @@ const posts = (await getCollection('blog')).sort(
 	}
 
 	@keyframes shine {
-		0% { left: -100%; }
-		50%, 100% { left: 100%; }
+		0% { transform: translateX(0); }
+		100% { transform: translateX(200%); }
 	}
 
 	@media (max-width: 720px) {
