@@ -2,7 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import BlueskyFeed from '../components/BlueskyFeed.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 3);
 ---
 
 <!doctype html>
@@ -13,37 +19,286 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero">
+				<h1>EIDOLWARE</h1>
+				<p class="tagline">{SITE_DESCRIPTION}</p>
+				<div class="cta-buttons">
+					<a href="https://fatbatstudio.itch.io/eidolware" target="_blank" rel="noopener noreferrer" class="cta-primary">
+						Follow on itch.io
+					</a>
+					<a href="#" class="cta-steam" title="Coming Soon">
+						Steam Coming Soon
+					</a>
+					<a href="/blog" class="cta-secondary">
+						Devlog
+					</a>
+				</div>
+			</section>
+
+			<section class="about">
+				<h2>About the Game</h2>
+				<p class="intro">
+					Infiltrate a 24/7 anime convention where holograms are real, influencers reign supreme, and cosplay culture has gone completely off the rails in this satirical action-RPG by FATBAT Studio.
+				</p>
+				<p>
+					You are Anna Lam, a former AI engineer. The mysterious death of your mentor has led you to a newly established 24-hour anime convention, owned and operated by a crypto-billionaire who styles himself "Fedora Mask".
+				</p>
+				<p>
+					Immerse yourself in the convention and meet its strange denizens. Team up with unlikely allies to defeat Fedora Mask's lieutenants and gain access to the convention's inner circle. Uncover the truth behind your mentor's death and if anyone is responsible, put an end to their plans.
+				</p>
+			</section>
+
+			<BlueskyFeed />
+
+			{posts.length > 0 && (
+				<section class="recent-posts">
+					<div class="section-header">
+						<h2>Devlog</h2>
+						<a href="/blog" class="view-all">View all posts →</a>
+					</div>
+					<div class="posts-grid">
+						{posts.map((post) => (
+							<article class="blog-card">
+								<a href={`/blog/${post.slug}/`}>
+									<h3>{post.data.title}</h3>
+									<time>{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+									<p>{post.data.description}</p>
+								</a>
+							</article>
+						))}
+					</div>
+				</section>
+			)}
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 4rem 0;
+		margin-bottom: 3rem;
+	}
+
+	.hero h1 {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+		background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.tagline {
+		font-size: 1.3rem;
+		color: rgb(var(--gray-dark));
+		margin-bottom: 2rem;
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.cta-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.cta-primary,
+	.cta-secondary,
+	.cta-steam {
+		padding: 1rem 2rem;
+		border-radius: 8px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		transition: all 0.3s ease;
+		font-size: 1rem;
+	}
+
+	.cta-primary {
+		background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+		color: var(--cyan);
+		border: 2px solid var(--purple);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.cta-primary::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(177, 255, 236, 0.3), transparent);
+		animation: itch-shine 3s infinite;
+	}
+
+	@keyframes itch-shine {
+		0% { left: -100%; }
+		50%, 100% { left: 100%; }
+	}
+
+	.cta-primary:hover {
+		box-shadow: var(--glow-purple);
+		transform: translateY(-2px);
+		border-color: var(--cyan);
+	}
+
+	.cta-steam {
+		background: transparent;
+		color: #66c0f4;
+		border: 2px solid #1b2838;
+	}
+
+	.cta-steam:hover {
+		box-shadow: 0 0 20px rgba(102, 192, 244, 0.2);
+		transform: translateY(-2px);
+		border-color: #66c0f4;
+		background-color: rgba(102, 192, 244, 0.05);
+	}
+
+	.cta-secondary {
+		background: transparent;
+		color: var(--cyan);
+		border: 2px solid var(--cyan);
+	}
+
+	.cta-secondary:hover {
+		background-color: rgba(177, 255, 236, 0.1);
+		box-shadow: var(--glow-cyan);
+		transform: translateY(-2px);
+	}
+
+	.about {
+		margin: 3rem 0;
+		padding: 2rem;
+		background-color: rgba(0, 0, 0, 0.5);
+		border: 1px solid var(--purple);
+		border-radius: 8px;
+		box-sizing: border-box;
+	}
+
+	.about h2 {
+		margin-top: 0;
+	}
+
+	.about p {
+		font-size: 1.1rem;
+		line-height: 1.8;
+	}
+
+	.about p.intro {
+		font-weight: 700;
+	}
+
+	.recent-posts {
+		margin: 3rem 0;
+	}
+
+	.section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 2rem;
+		border-bottom: 2px solid var(--purple);
+		padding-bottom: 1rem;
+	}
+
+	.section-header h2 {
+		margin: 0;
+	}
+
+	.posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: 2rem;
+	}
+
+	.blog-card {
+		padding: 1.5rem;
+		background-color: rgba(0, 0, 0, 0.5);
+		border: 1px solid var(--purple);
+		border-radius: 8px;
+		transition: all 0.3s ease;
+	}
+
+	.blog-card:hover {
+		border-color: var(--cyan);
+		box-shadow: 0 0 20px rgba(177, 255, 236, 0.2);
+		transform: translateY(-2px);
+	}
+
+	.blog-card a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.blog-card h3 {
+		font-size: 1.3rem;
+		margin-bottom: 0.5rem;
+		color: var(--cyan);
+	}
+
+	.blog-card time {
+		font-size: 0.85rem;
+		color: rgb(var(--gray));
+		display: block;
+		margin-bottom: 0.75rem;
+	}
+
+	.blog-card p {
+		color: rgb(var(--gray-dark));
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	@media (max-width: 720px) {
+		.hero {
+			padding: 2rem 0;
+			margin-bottom: 2rem;
+		}
+
+		.hero h1 {
+			font-size: 2rem;
+			margin-bottom: 0.75rem;
+		}
+
+		.tagline {
+			font-size: 1rem;
+		}
+
+		.cta-buttons {
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		.cta-primary,
+		.cta-secondary,
+		.cta-steam {
+			width: 100%;
+			max-width: 100%;
+			padding: 0.875rem 1rem;
+			font-size: 0.9rem;
+			box-sizing: border-box;
+		}
+
+		.about {
+			padding: 1.5rem 1rem;
+			margin: 2rem 0;
+		}
+
+		.section-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+		}
+
+		.posts-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

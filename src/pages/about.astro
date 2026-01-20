@@ -1,63 +1,178 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`About - ${SITE_TITLE}`} description="About Fat Bat Studio, the creators of EIDOLWARE" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="hero">
+				<h1>About Fat Bat Studio</h1>
+				<p class="subtitle">Independent game development with a cyberpunk edge</p>
+			</section>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+			<section class="content">
+				<div class="about-section">
+					<h2>Who We Are</h2>
+					<p>
+						Fat Bat Studio is an independent game development studio focused on creating immersive narrative experiences
+						that blend dark humor, cyberpunk aesthetics, and engaging gameplay mechanics.
+					</p>
+				</div>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+				<div class="about-section">
+					<h2>Our Vision</h2>
+					<p>
+						We believe in crafting games that challenge conventions and explore unique narratives. EIDOLWARE represents
+						our commitment to creating worlds that are both visually striking and thematically rich, where players can
+						uncover layers of story through exploration and combat.
+					</p>
+				</div>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+				<div class="about-section">
+					<h2>Current Project</h2>
+					<p>
+						Our flagship title, EIDOLWARE, is an action RPG that follows Anna Lam as she investigates her mentor's death
+						at a surreal 24/7 anime convention. The game features team-based combat, holographic environments powered by
+						blockchain technology, and a cast of memorable characters navigating a world where reality and digital illusion blur.
+					</p>
+				</div>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+				<div class="about-section">
+					<h2>Get in Touch</h2>
+					<div class="social-links">
+						<a href="https://bsky.app/profile/fatbat.studio" target="_blank" rel="noopener noreferrer" class="social-link">
+							<svg viewBox="0 0 24 24" aria-hidden="true" width="32" height="32">
+								<path
+									fill="currentColor"
+									d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"
+								/>
+							</svg>
+							Follow on Bluesky
+						</a>
+						<a href="https://fatbatstudio.itch.io/eidolware" target="_blank" rel="noopener noreferrer" class="social-link">
+							<svg viewBox="0 0 24 24" aria-hidden="true" width="32" height="32">
+								<path
+									fill="currentColor"
+									d="M3.13 1.338C2.08 1.96.02 4.328 0 4.95v1.03c0 1.303 1.22 2.45 2.325 2.45 1.33 0 2.436-1.102 2.436-2.41 0 1.308 1.07 2.41 2.4 2.41 1.328 0 2.362-1.102 2.362-2.41 0 1.308 1.137 2.41 2.466 2.41h.024c1.33 0 2.466-1.102 2.466-2.41 0 1.308 1.034 2.41 2.363 2.41 1.33 0 2.4-1.102 2.4-2.41 0 1.308 1.106 2.41 2.435 2.41C22.78 8.43 24 7.283 24 5.98V4.95c-.02-.62-2.082-2.99-3.13-3.612-3.253-.114-5.508-.134-8.87-.133-3.362 0-7.945.053-8.87.133zm6.376 6.477c-1.496 0-2.886.8-3.487 1.81-.344.577-.737 1.005-1.142 1.318-.787-1.087-1.145-2.405-1.145-3.372 0-1.303-1.22-2.45-2.325-2.45C.22 5.121 0 6.303 0 7.606c0 .758.222 1.45.615 2.034-.393-.164-.86-.25-1.36-.25C.78 9.39.02 10.15.02 11.045c0 .894.76 1.654 1.654 1.654.894 0 1.654-.76 1.654-1.654 0 .894.76 1.654 1.654 1.654.895 0 1.655-.76 1.655-1.654 0 .894.76 1.654 1.654 1.654h.024c.894 0 1.654-.76 1.654-1.654 0 .894.76 1.654 1.654 1.654.895 0 1.655-.76 1.655-1.654 0 .894.76 1.654 1.654 1.654.895 0 1.654-.76 1.654-1.654 0 .894.76 1.654 1.654 1.654.895 0 1.655-.76 1.655-1.654 0 .894.76 1.654 1.654 1.654.894 0 1.654-.76 1.654-1.654 0-.894-.76-1.654-1.654-1.654-.5 0-.967.086-1.36.25.393-.584.615-1.276.615-2.034 0-1.303-.22-2.485-1.375-2.485-1.105 0-2.325 1.147-2.325 2.45 0 .967-.358 2.285-1.145 3.372-.405-.313-.798-.74-1.142-1.318-.601-1.01-1.99-1.81-3.487-1.81zm.393 8.289l-1.31 5.288c-.11.446.282.864.735.864h8.375c.453 0 .846-.418.735-.864l-1.31-5.288c-.11-.447-.552-.745-1.01-.745H10.91c-.458 0-.9.298-1.01.745z"
+								/>
+							</svg>
+							Follow on itch.io
+						</a>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 3rem 0;
+		margin-bottom: 3rem;
+		border-bottom: 2px solid var(--purple);
+	}
+
+	.hero h1 {
+		font-size: 3.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		color: rgb(var(--gray));
+		margin: 0;
+	}
+
+	.content {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	.about-section {
+		margin: 3rem 0;
+		padding: 2rem;
+		background-color: rgba(0, 0, 0, 0.5);
+		border: 1px solid var(--purple);
+		border-radius: 8px;
+		transition: all 0.3s ease;
+	}
+
+	.about-section:hover {
+		border-color: var(--cyan);
+		box-shadow: 0 0 20px rgba(177, 255, 236, 0.2);
+	}
+
+	.about-section h2 {
+		margin-top: 0;
+		font-size: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.about-section p {
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: rgb(var(--gray-dark));
+		margin: 0;
+	}
+
+	.social-links {
+		display: flex;
+		gap: 1.5rem;
+		margin-top: 1.5rem;
+		flex-wrap: wrap;
+	}
+
+	.social-link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 1.5rem;
+		border: 2px solid var(--purple);
+		border-radius: 8px;
+		background-color: rgba(0, 0, 0, 0.3);
+		transition: all 0.3s ease;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-size: 0.9rem;
+	}
+
+	.social-link:hover {
+		border-color: var(--cyan);
+		box-shadow: var(--glow-cyan);
+		transform: translateY(-2px);
+		background-color: rgba(177, 255, 236, 0.1);
+	}
+
+	.social-link svg {
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 720px) {
+		.hero h1 {
+			font-size: 2.5rem;
+		}
+
+		.about-section {
+			padding: 1.5rem;
+		}
+
+		.social-links {
+			flex-direction: column;
+		}
+
+		.social-link {
+			justify-content: center;
+		}
+	}
+</style>
