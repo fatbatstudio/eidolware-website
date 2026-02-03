@@ -1,15 +1,15 @@
 // @ts-check
 
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
+import { defineConfig } from "astro/config";
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
   // Update this with your actual domain
-  site: 'https://eidolware.com',
+  site: "https://eidolware.com",
 
   integrations: [mdx(), sitemap()],
 

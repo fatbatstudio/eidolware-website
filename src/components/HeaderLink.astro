@@ -1,50 +1,51 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-type Props = HTMLAttributes<'a'>;
+type Props = HTMLAttributes<"a">;
 
 const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
 const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
 ---
 
 <a
-	href={href}
-	class:list={[
-		'inline-block no-underline py-4 px-2 text-cyber-cyan border-b-2 border-transparent transition-all duration-300 hover:border-cyber-cyan md:text-sm md:py-2',
-		className,
-		{
-			'active-link font-bold !border-b-cyber-cyan': isActive
-		}
-	]}
-	{...props}
+  href={href}
+  class:list={[
+    "text-cyber-cyan hover:border-cyber-cyan inline-block border-b-2 border-transparent px-2 py-4 no-underline transition-all duration-300 md:py-2 md:text-sm",
+    className,
+    {
+      "active-link !border-b-cyber-cyan font-bold": isActive,
+    },
+  ]}
+  {...props}
 >
-	<slot />
+  <slot />
 </a>
 
 <style>
-	.active-link {
-		position: relative;
-	}
+  .active-link {
+    position: relative;
+  }
 
-	.active-link::after {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		height: 2px;
-		background-color: var(--cyber-cyan);
-		box-shadow: 0 0 8px rgba(177, 255, 236, 0.8),
-		            0 0 12px rgba(177, 255, 236, 0.6),
-		            0 0 16px rgba(177, 255, 236, 0.4);
-	}
+  .active-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--cyber-cyan);
+    box-shadow:
+      0 0 8px rgba(177, 255, 236, 0.8),
+      0 0 12px rgba(177, 255, 236, 0.6),
+      0 0 16px rgba(177, 255, 236, 0.4);
+  }
 
-	@media (max-width: 720px) {
-		a {
-			padding: 0.5em 0.5em !important;
-			font-size: 0.85em !important;
-		}
-	}
+  @media (max-width: 720px) {
+    a {
+      padding: 0.5em 0.5em !important;
+      font-size: 0.85em !important;
+    }
+  }
 </style>

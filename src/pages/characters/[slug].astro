@@ -1,287 +1,312 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
-import { SITE_TITLE } from '../../consts';
-import { characters } from '../../data/characters';
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import { SITE_TITLE } from "../../consts";
+import { characters } from "../../data/characters";
 
 export async function getStaticPaths() {
-	return characters.map((character) => ({
-		params: { slug: character.slug },
-		props: { character },
-	}));
+  return characters.map((character) => ({
+    params: { slug: character.slug },
+    props: { character },
+  }));
 }
 
 const { character } = Astro.props;
-const isAntagonist = character.type === 'antagonist';
+const isAntagonist = character.type === "antagonist";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead
-			title={`${character.name} - ${SITE_TITLE}`}
-			description={character.description}
-		/>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<div class="character-detail">
-				<div class="character-header">
-					<a href="/characters" class="back-link">← Back to Characters</a>
-					<h1 class:list={['character-name', { antagonist: isAntagonist }]}>{character.name}</h1>
-					<p class="character-role">{character.role}</p>
-				</div>
+  <head>
+    <BaseHead
+      title={`${character.name} - ${SITE_TITLE}`}
+      description={character.description}
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="character-detail">
+        <div class="character-header">
+          <a href="/characters" class="back-link">← Back to Characters</a>
+          <h1 class:list={["character-name", { antagonist: isAntagonist }]}>
+            {character.name}
+          </h1>
+          <p class="character-role">{character.role}</p>
+        </div>
 
-				<div class="character-content">
-					<div class="character-image-large">
-						{character.image ? (
-							<img src={character.image} alt={character.name} />
-						) : (
-							<div class:list={['character-placeholder', { antagonist: isAntagonist }]}>
-								<span>?</span>
-							</div>
-						)}
-					</div>
+        <div class="character-content">
+          <div class="character-image-large">
+            {
+              character.image ? (
+                <img src={character.image} alt={character.name} />
+              ) : (
+                <div
+                  class:list={[
+                    "character-placeholder",
+                    { antagonist: isAntagonist },
+                  ]}
+                >
+                  <span>?</span>
+                </div>
+              )
+            }
+          </div>
 
-					<div class="character-info">
-						<section class="info-section">
-							<h2>Overview</h2>
-							{(character.bio || character.description).split('\n\n').map((paragraph: string) => (
-								<p>{paragraph}</p>
-							))}
-						</section>
+          <div class="character-info">
+            <section class="info-section">
+              <h2>Overview</h2>
+              {
+                (character.bio || character.description)
+                  .split("\n\n")
+                  .map((paragraph: string) => <p>{paragraph}</p>)
+              }
+            </section>
 
-						{character.abilities && character.abilities.length > 0 && (
-							<section class="info-section">
-								<h2>Abilities & Skills</h2>
-								<ul class="abilities-list">
-									{character.abilities.map((ability) => {
-										const [title, ...descParts] = ability.split(' - ');
-										const description = descParts.join(' - ');
-										return (
-											<li>
-												<strong>{title}</strong>
-												{description && <span> - {description}</span>}
-											</li>
-										);
-									})}
-								</ul>
-							</section>
-						)}
+            {
+              character.abilities && character.abilities.length > 0 && (
+                <section class="info-section">
+                  <h2>Abilities & Skills</h2>
+                  <ul class="abilities-list">
+                    {character.abilities.map((ability) => {
+                      const [title, ...descParts] = ability.split(" - ");
+                      const description = descParts.join(" - ");
+                      return (
+                        <li>
+                          <strong>{title}</strong>
+                          {description && <span> - {description}</span>}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              )
+            }
 
-						{character.background && (
-							<section class="info-section">
-								<h2>Background</h2>
-								<p>{character.background}</p>
-							</section>
-						)}
-					</div>
-				</div>
-			</div>
-		</main>
-		<Footer />
-	</body>
+            {
+              character.background && (
+                <section class="info-section">
+                  <h2>Background</h2>
+                  <p>{character.background}</p>
+                </section>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	.character-detail {
-		max-width: 1200px;
-		margin: 0 auto;
-	}
+  .character-detail {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-	.character-header {
-		text-align: center;
-		padding: 2rem 0 3rem;
-		border-bottom: 2px solid var(--purple);
-		margin-bottom: 3rem;
-	}
+  .character-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-bottom: 2px solid var(--purple);
+    margin-bottom: 3rem;
+  }
 
-	.back-link {
-		display: inline-block;
-		margin-bottom: 2rem;
-		font-size: 0.9rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		font-weight: 600;
-		padding: 0.75rem 1.5rem;
-		border: 1px solid var(--cyan);
-		border-radius: 4px;
-		transition: all 0.3s ease;
-	}
+  .back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
 
-	.back-link:hover {
-		background-color: rgba(177, 255, 236, 0.1);
-		box-shadow: var(--glow-cyan);
-	}
+  .back-link:hover {
+    background-color: rgba(177, 255, 236, 0.1);
+    box-shadow: var(--glow-cyan);
+  }
 
-	.character-name {
-		font-size: 3.5rem;
-		margin-bottom: 0.5rem;
-		color: var(--cyan);
-		text-shadow: var(--glow-cyan);
-	}
+  .character-name {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
+  }
 
-	.character-name.antagonist {
-		color: #ff4444;
-		text-shadow: 0 0 10px rgba(255, 68, 68, 0.8),
-			0 0 20px rgba(255, 68, 68, 0.6),
-			0 0 30px rgba(255, 68, 68, 0.4);
-	}
+  .character-name.antagonist {
+    color: #ff4444;
+    text-shadow:
+      0 0 10px rgba(255, 68, 68, 0.8),
+      0 0 20px rgba(255, 68, 68, 0.6),
+      0 0 30px rgba(255, 68, 68, 0.4);
+  }
 
-	.character-role {
-		font-size: 1.2rem;
-		color: var(--accent);
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		font-weight: 600;
-	}
+  .character-role {
+    font-size: 1.2rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+  }
 
-	.character-content {
-		display: grid;
-		grid-template-columns: 400px 1fr;
-		gap: 3rem;
-		align-items: start;
-	}
+  .character-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
 
-	.character-image-large {
-		position: sticky;
-		top: 2rem;
-		width: 100%;
-		aspect-ratio: 1;
-		border-radius: 8px;
-		overflow: hidden;
-	}
+  .character-image-large {
+    position: sticky;
+    top: 2rem;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
 
-	.character-image-large img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		border: 2px solid var(--purple);
-		border-radius: 8px;
-	}
+  .character-image-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+  }
 
-	.character-placeholder {
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 100%);
-		border-radius: 8px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 2px solid var(--purple);
-		position: relative;
-		overflow: hidden;
-	}
+  .character-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--purple-dark) 0%,
+      var(--purple) 100%
+    );
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--purple);
+    position: relative;
+    overflow: hidden;
+  }
 
-	.character-placeholder.antagonist {
-		background: linear-gradient(135deg, #8b0000 0%, #4d0000 100%);
-		border-color: #8b0000;
-	}
+  .character-placeholder.antagonist {
+    background: linear-gradient(135deg, #8b0000 0%, #4d0000 100%);
+    border-color: #8b0000;
+  }
 
-	.character-placeholder::before {
-		content: '';
-		position: absolute;
-		top: -50%;
-		left: -50%;
-		width: 200%;
-		height: 200%;
-		background: linear-gradient(
-			45deg,
-			transparent 30%,
-			rgba(177, 255, 236, 0.1) 50%,
-			transparent 70%
-		);
-		animation: shine 3s infinite;
-	}
+  .character-placeholder::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(177, 255, 236, 0.1) 50%,
+      transparent 70%
+    );
+    animation: shine 3s infinite;
+  }
 
-	@keyframes shine {
-		0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-		100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-	}
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+      transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+  }
 
-	.character-placeholder span {
-		font-size: 8rem;
-		font-family: "Orbitron", sans-serif;
-		color: var(--cyan);
-		text-shadow: var(--glow-cyan);
-		z-index: 1;
-	}
+  .character-placeholder span {
+    font-size: 8rem;
+    font-family: "Orbitron", sans-serif;
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
+    z-index: 1;
+  }
 
-	.character-placeholder.antagonist span {
-		color: #ff4444;
-		text-shadow: 0 0 10px rgba(255, 68, 68, 0.8),
-			0 0 20px rgba(255, 68, 68, 0.6),
-			0 0 30px rgba(255, 68, 68, 0.4);
-	}
+  .character-placeholder.antagonist span {
+    color: #ff4444;
+    text-shadow:
+      0 0 10px rgba(255, 68, 68, 0.8),
+      0 0 20px rgba(255, 68, 68, 0.6),
+      0 0 30px rgba(255, 68, 68, 0.4);
+  }
 
-	.character-info {
-		display: flex;
-		flex-direction: column;
-		gap: 2.5rem;
-	}
+  .character-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
 
-	.info-section {
-		background-color: rgba(0, 0, 0, 0.5);
-		border: 1px solid var(--purple);
-		border-radius: 8px;
-		padding: 2rem;
-	}
+  .info-section {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--purple);
+    border-radius: 8px;
+    padding: 2rem;
+  }
 
-	.info-section h2 {
-		font-size: 1.8rem;
-		margin-bottom: 1.5rem;
-		color: var(--cyan);
-		border-bottom: 1px solid var(--purple);
-		padding-bottom: 0.75rem;
-	}
+  .info-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--cyan);
+    border-bottom: 1px solid var(--purple);
+    padding-bottom: 0.75rem;
+  }
 
-	.info-section p {
-		color: rgb(var(--gray-dark));
-		line-height: 1.8;
-		font-size: 1.1rem;
-		margin: 0 0 1.5rem 0;
-	}
+  .info-section p {
+    color: rgb(var(--gray-dark));
+    line-height: 1.8;
+    font-size: 1.1rem;
+    margin: 0 0 1.5rem 0;
+  }
 
-	.info-section p:last-child {
-		margin-bottom: 0;
-	}
+  .info-section p:last-child {
+    margin-bottom: 0;
+  }
 
-	@media (max-width: 1024px) {
-		.character-content {
-			grid-template-columns: 1fr;
-			gap: 2rem;
-		}
+  @media (max-width: 1024px) {
+    .character-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
 
-		.character-image-large {
-			position: relative;
-			top: 0;
-			max-width: 500px;
-			margin: 0 auto;
-		}
-	}
+    .character-image-large {
+      position: relative;
+      top: 0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  }
 
-	@media (max-width: 720px) {
-		.character-name {
-			font-size: 2.5rem;
-		}
+  @media (max-width: 720px) {
+    .character-name {
+      font-size: 2.5rem;
+    }
 
-		.character-image-large {
-			max-width: 100%;
-		}
+    .character-image-large {
+      max-width: 100%;
+    }
 
-		.character-placeholder span {
-			font-size: 5rem;
-		}
+    .character-placeholder span {
+      font-size: 5rem;
+    }
 
-		.info-section {
-			padding: 1.5rem;
-		}
+    .info-section {
+      padding: 1.5rem;
+    }
 
-		.back-link {
-			font-size: 0.8rem;
-			padding: 0.6rem 1.2rem;
-		}
-	}
+    .back-link {
+      font-size: 0.8rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
 </style>

@@ -1,145 +1,208 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
-import { protagonists, antagonists } from '../data/characters';
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
+import { protagonists, antagonists } from "../data/characters";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={`Characters - ${SITE_TITLE}`} description="Meet the characters of EIDOLWARE" />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="text-center py-12 mb-12 border-b-2 border-cyber-purple">
-				<h1 class="text-6xl mb-4">Characters</h1>
-				<p class="text-xl text-cyber-gray m-0">The characters in this twisted convention</p>
-			</section>
+  <head>
+    <BaseHead
+      title={`Characters - ${SITE_TITLE}`}
+      description="Meet the characters of EIDOLWARE"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="border-cyber-purple mb-12 border-b-2 py-12 text-center">
+        <h1 class="mb-4 text-6xl">Characters</h1>
+        <p class="text-cyber-gray m-0 text-xl">
+          The characters in this twisted convention
+        </p>
+      </section>
 
-			<section class="my-16">
-				<h2 class="text-3xl mb-8 pb-4 border-b border-cyber-purple">Protagonists</h2>
-				<div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-10">
-					{protagonists.map((character) => (
-						<a href={`/characters/${character.slug}`} class="block no-underline text-inherit cursor-pointer bg-black/50 border border-cyber-purple rounded-lg p-6 transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(177,255,236,0.2)] hover:-translate-y-1">
-							<div class="w-full aspect-square mb-6 rounded-lg overflow-hidden">
-								{character.image ? (
-									<img src={character.image} alt={character.name} class="w-full h-full object-cover border-2 border-cyber-purple rounded-lg transition-all duration-300 character-img" />
-								) : (
-									<div class="character-placeholder w-full h-full bg-gradient-to-br from-cyber-purple-dark to-cyber-purple rounded-lg flex items-center justify-center border-2 border-cyber-purple relative overflow-hidden">
-										<span class="text-7xl font-display text-cyber-cyan z-10 character-question">?</span>
-									</div>
-								)}
-							</div>
-							<div>
-								<h3 class="text-2xl mb-2 text-cyber-cyan">{character.name}</h3>
-								<p class="text-sm text-cyber-cyan uppercase tracking-widest mb-4 font-semibold">{character.role}</p>
-								<div class="text-cyber-gray-dark leading-relaxed">
-									{character.description.split('\n\n').map((paragraph: string) => (
-										<p class="mb-4 last:mb-0">{paragraph}</p>
-									))}
-								</div>
-							</div>
-						</a>
-					))}
-					{protagonists.length === 0 && (
-						<div class="col-span-full text-center p-12 bg-black/30 border border-dashed border-cyber-purple rounded-lg">
-							<p class="text-xl text-cyber-gray m-0 italic">Character profiles coming soon...</p>
-						</div>
-					)}
-				</div>
-			</section>
+      <section class="my-16">
+        <h2 class="border-cyber-purple mb-8 border-b pb-4 text-3xl">
+          Protagonists
+        </h2>
+        <div
+          class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-10"
+        >
+          {
+            protagonists.map((character) => (
+              <a
+                href={`/characters/${character.slug}`}
+                class="border-cyber-purple hover:border-cyber-cyan block cursor-pointer rounded-lg border bg-black/50 p-6 text-inherit no-underline transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]"
+              >
+                <div class="mb-6 aspect-square w-full overflow-hidden rounded-lg">
+                  {character.image ? (
+                    <img
+                      src={character.image}
+                      alt={character.name}
+                      class="border-cyber-purple character-img h-full w-full rounded-lg border-2 object-cover transition-all duration-300"
+                    />
+                  ) : (
+                    <div class="character-placeholder from-cyber-purple-dark to-cyber-purple border-cyber-purple relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg border-2 bg-gradient-to-br">
+                      <span class="font-display text-cyber-cyan character-question z-10 text-7xl">
+                        ?
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h3 class="text-cyber-cyan mb-2 text-2xl">
+                    {character.name}
+                  </h3>
+                  <p class="text-cyber-cyan mb-4 text-sm font-semibold tracking-widest uppercase">
+                    {character.role}
+                  </p>
+                  <div class="text-cyber-gray-dark leading-relaxed">
+                    {character.description
+                      .split("\n\n")
+                      .map((paragraph: string) => (
+                        <p class="mb-4 last:mb-0">{paragraph}</p>
+                      ))}
+                  </div>
+                </div>
+              </a>
+            ))
+          }
+          {
+            protagonists.length === 0 && (
+              <div class="border-cyber-purple col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
+                <p class="text-cyber-gray m-0 text-xl italic">
+                  Character profiles coming soon...
+                </p>
+              </div>
+            )
+          }
+        </div>
+      </section>
 
-			<section class="my-16">
-				<h2 class="text-3xl mb-8 pb-4 border-b border-cyber-purple">Antagonists</h2>
-				<div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-10">
-					{antagonists.map((character) => (
-						<a href={`/characters/${character.slug}`} class="antagonist-card block no-underline text-inherit cursor-pointer bg-black/50 border border-[#8b0000] rounded-lg p-6 transition-all duration-300 hover:border-[#ff4444] hover:shadow-[0_0_20px_rgba(255,68,68,0.3)] hover:-translate-y-1">
-							<div class="w-full aspect-square mb-6 rounded-lg overflow-hidden">
-								{character.image ? (
-									<img src={character.image} alt={character.name} class="w-full h-full object-cover border-2 border-[#8b0000] rounded-lg transition-all duration-300 antagonist-img" />
-								) : (
-									<div class="antagonist-placeholder w-full h-full bg-gradient-to-br from-[#8b0000] to-[#4d0000] rounded-lg flex items-center justify-center border-2 border-[#8b0000] relative overflow-hidden">
-										<span class="text-7xl font-display text-[#ff4444] z-10 antagonist-question">?</span>
-									</div>
-								)}
-							</div>
-							<div>
-								<h3 class="text-2xl mb-2 text-[#ff4444]">{character.name}</h3>
-								<p class="text-sm text-[#ff8888] uppercase tracking-widest mb-4 font-semibold">{character.role}</p>
-								<div class="text-cyber-gray-dark leading-relaxed">
-									{character.description.split('\n\n').map((paragraph: string) => (
-										<p class="mb-4 last:mb-0">{paragraph}</p>
-									))}
-								</div>
-							</div>
-						</a>
-					))}
-					{antagonists.length === 0 && (
-						<div class="col-span-full text-center p-12 bg-black/30 border border-dashed border-cyber-purple rounded-lg">
-							<p class="text-xl text-cyber-gray m-0 italic">Character profiles coming soon...</p>
-						</div>
-					)}
-				</div>
-			</section>
-		</main>
-		<Footer />
-	</body>
+      <section class="my-16">
+        <h2 class="border-cyber-purple mb-8 border-b pb-4 text-3xl">
+          Antagonists
+        </h2>
+        <div
+          class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-10"
+        >
+          {
+            antagonists.map((character) => (
+              <a
+                href={`/characters/${character.slug}`}
+                class="antagonist-card block cursor-pointer rounded-lg border border-[#8b0000] bg-black/50 p-6 text-inherit no-underline transition-all duration-300 hover:-translate-y-1 hover:border-[#ff4444] hover:shadow-[0_0_20px_rgba(255,68,68,0.3)]"
+              >
+                <div class="mb-6 aspect-square w-full overflow-hidden rounded-lg">
+                  {character.image ? (
+                    <img
+                      src={character.image}
+                      alt={character.name}
+                      class="antagonist-img h-full w-full rounded-lg border-2 border-[#8b0000] object-cover transition-all duration-300"
+                    />
+                  ) : (
+                    <div class="antagonist-placeholder relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg border-2 border-[#8b0000] bg-gradient-to-br from-[#8b0000] to-[#4d0000]">
+                      <span class="font-display antagonist-question z-10 text-7xl text-[#ff4444]">
+                        ?
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h3 class="mb-2 text-2xl text-[#ff4444]">{character.name}</h3>
+                  <p class="mb-4 text-sm font-semibold tracking-widest text-[#ff8888] uppercase">
+                    {character.role}
+                  </p>
+                  <div class="text-cyber-gray-dark leading-relaxed">
+                    {character.description
+                      .split("\n\n")
+                      .map((paragraph: string) => (
+                        <p class="mb-4 last:mb-0">{paragraph}</p>
+                      ))}
+                  </div>
+                </div>
+              </a>
+            ))
+          }
+          {
+            antagonists.length === 0 && (
+              <div class="border-cyber-purple col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
+                <p class="text-cyber-gray m-0 text-xl italic">
+                  Character profiles coming soon...
+                </p>
+              </div>
+            )
+          }
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	.character-placeholder::before {
-		content: '';
-		position: absolute;
-		top: -50%;
-		left: -50%;
-		width: 200%;
-		height: 200%;
-		background: linear-gradient(
-			45deg,
-			transparent 30%,
-			rgba(177, 255, 236, 0.1) 50%,
-			transparent 70%
-		);
-		animation: shine-character 3s infinite;
-	}
+  .character-placeholder::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(177, 255, 236, 0.1) 50%,
+      transparent 70%
+    );
+    animation: shine-character 3s infinite;
+  }
 
-	@keyframes shine-character {
-		0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-		100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-	}
+  @keyframes shine-character {
+    0% {
+      transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+      transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+  }
 
-	.character-question {
-		text-shadow: 0 0 10px rgba(177, 255, 236, 0.8), 0 0 20px rgba(177, 255, 236, 0.6), 0 0 30px rgba(177, 255, 236, 0.4);
-	}
+  .character-question {
+    text-shadow:
+      0 0 10px rgba(177, 255, 236, 0.8),
+      0 0 20px rgba(177, 255, 236, 0.6),
+      0 0 30px rgba(177, 255, 236, 0.4);
+  }
 
-	.antagonist-question {
-		text-shadow: 0 0 10px rgba(255, 68, 68, 0.8), 0 0 20px rgba(255, 68, 68, 0.6), 0 0 30px rgba(255, 68, 68, 0.4);
-	}
+  .antagonist-question {
+    text-shadow:
+      0 0 10px rgba(255, 68, 68, 0.8),
+      0 0 20px rgba(255, 68, 68, 0.6),
+      0 0 30px rgba(255, 68, 68, 0.4);
+  }
 
-	a:hover .character-img {
-		border-color: #b1ffec !important;
-		box-shadow: 0 0 15px rgba(177, 255, 236, 0.4) !important;
-	}
+  a:hover .character-img {
+    border-color: #b1ffec !important;
+    box-shadow: 0 0 15px rgba(177, 255, 236, 0.4) !important;
+  }
 
-	.antagonist-card:hover .antagonist-img {
-		border-color: #ff4444 !important;
-		box-shadow: 0 0 15px rgba(255, 68, 68, 0.4) !important;
-	}
+  .antagonist-card:hover .antagonist-img {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4) !important;
+  }
 
-	@media (max-width: 720px) {
-		.text-6xl {
-			font-size: 2.5rem !important;
-		}
+  @media (max-width: 720px) {
+    .text-6xl {
+      font-size: 2.5rem !important;
+    }
 
-		.grid {
-			grid-template-columns: 1fr !important;
-		}
+    .grid {
+      grid-template-columns: 1fr !important;
+    }
 
-		.text-7xl {
-			font-size: 3rem !important;
-		}
-	}
+    .text-7xl {
+      font-size: 3rem !important;
+    }
+  }
 </style>

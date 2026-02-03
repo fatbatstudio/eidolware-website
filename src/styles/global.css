@@ -95,21 +95,34 @@
 }
 
 @keyframes flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
     opacity: 1;
     text-shadow:
       0 0 10px rgba(177, 255, 236, 0.8),
       0 0 20px rgba(177, 255, 236, 0.6),
       0 0 30px rgba(177, 255, 236, 0.4);
   }
-  19%, 21%, 23%, 24%, 54%, 55%, 56% {
+  19%,
+  21%,
+  23%,
+  24%,
+  54%,
+  55%,
+  56% {
     opacity: 0.85;
     text-shadow:
       0 0 8px rgba(177, 255, 236, 0.7),
       0 0 15px rgba(177, 255, 236, 0.5),
       0 0 25px rgba(177, 255, 236, 0.3);
   }
-  20%, 24.5% {
+  20%,
+  24.5% {
     opacity: 0.75;
     text-shadow:
       0 0 7px rgba(177, 255, 236, 0.6),
@@ -120,7 +133,7 @@
 
 @layer base {
   body {
-    @apply font-sans m-0 p-0 text-left text-lg leading-relaxed min-h-screen overflow-x-hidden;
+    @apply m-0 min-h-screen overflow-x-hidden p-0 text-left font-sans text-lg leading-relaxed;
     font-family: "Inter", sans-serif;
     background-color: var(--cyber-black);
     color: var(--cyber-gray-dark);
@@ -153,7 +166,7 @@
   h5,
   h6 {
     font-family: "Orbitron", sans-serif;
-    @apply m-0 mb-2 leading-tight font-bold uppercase tracking-wider;
+    @apply m-0 mb-2 leading-tight font-bold tracking-wider uppercase;
     color: var(--cyber-cyan);
   }
 
@@ -220,18 +233,18 @@
   }
 
   img {
-    @apply max-w-full h-auto rounded-lg;
+    @apply h-auto max-w-full rounded-lg;
   }
 
   code {
-    @apply px-1 py-0.5 rounded font-mono;
+    @apply rounded px-1 py-0.5 font-mono;
     color: var(--cyber-cyan);
     background-color: rgba(109, 31, 104, 0.3);
     border: 1px solid var(--cyber-purple);
   }
 
   pre {
-    @apply p-6 rounded-lg;
+    @apply rounded-lg p-6;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--cyber-purple);
   }
@@ -241,7 +254,7 @@
   }
 
   blockquote {
-    @apply border-l-4 pl-5 m-0 text-2xl;
+    @apply m-0 border-l-4 pl-5 text-2xl;
     border-color: var(--cyber-cyan);
   }
 
@@ -262,14 +275,14 @@
     }
 
     main {
-      @apply px-4 py-6 max-w-full w-full box-border;
+      @apply box-border w-full max-w-full px-4 py-6;
     }
   }
 }
 
 /* Screen reader only utility */
 .sr-only {
-  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap;
+  @apply absolute -m-px h-px w-px overflow-hidden p-0 whitespace-nowrap;
   clip: rect(0, 0, 0, 0);
   border: 0;
 }

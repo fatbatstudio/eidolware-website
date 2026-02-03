@@ -1,5 +1,5 @@
 ---
-import { BLUESKY_HANDLE } from '../consts';
+import { BLUESKY_HANDLE } from "../consts";
 
 interface BlueskyImage {
   thumb: string;
@@ -39,18 +39,18 @@ let error = null;
 
 try {
   const response = await fetch(
-    `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${BLUESKY_HANDLE}&limit=3`
+    `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${BLUESKY_HANDLE}&limit=3`,
   );
 
   if (response.ok) {
     const data = await response.json();
     posts = data.feed.map((item: any) => item.post);
   } else {
-    error = 'Failed to load posts';
+    error = "Failed to load posts";
   }
 } catch (e) {
-  error = 'Failed to connect to Bluesky';
-  console.error('Bluesky feed error:', e);
+  error = "Failed to connect to Bluesky";
+  console.error("Bluesky feed error:", e);
 }
 
 function formatDate(dateString: string) {
@@ -59,15 +59,19 @@ function formatDate(dateString: string) {
   const diff = now.getTime() - date.getTime();
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days === 0) return 'Today';
-  if (days === 1) return 'Yesterday';
+  if (days === 0) return "Today";
+  if (days === 1) return "Yesterday";
   if (days < 7) return `${days}d ago`;
 
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 function getPostUrl(uri: string) {
-  const parts = uri.replace('at://', '').split('/');
+  const parts = uri.replace("at://", "").split("/");
   const handle = parts[0];
   const postId = parts[parts.length - 1];
   return `https://bsky.app/profile/${handle}/post/${postId}`;
@@ -84,7 +88,7 @@ function extractFirstUrlLike(text: string) {
 
   for (const match of text.matchAll(urlRegex)) {
     const raw = match[0];
-    const cleaned = raw.replace(/[)\].,!?]+$/, '');
+    const cleaned = raw.replace(/[)\].,!?]+$/, "");
     return normalizeUrl(cleaned);
   }
 
@@ -94,16 +98,16 @@ function extractFirstUrlLike(text: string) {
 function getYouTubeIdFromUrl(urlOrDomain: string) {
   try {
     const url = new URL(normalizeUrl(urlOrDomain));
-    const hostname = url.hostname.replace(/^www\./, '');
+    const hostname = url.hostname.replace(/^www\./, "");
 
-    if (hostname === 'youtu.be') {
-      const id = url.pathname.split('/').filter(Boolean)[0];
+    if (hostname === "youtu.be") {
+      const id = url.pathname.split("/").filter(Boolean)[0];
       return id && id.length === 11 ? id : null;
     }
 
-    if (hostname.endsWith('youtube.com')) {
-      if (url.pathname === '/watch') {
-        const id = url.searchParams.get('v');
+    if (hostname.endsWith("youtube.com")) {
+      if (url.pathname === "/watch") {
+        const id = url.searchParams.get("v");
         return id && id.length === 11 ? id : null;
       }
 
@@ -120,8 +124,10 @@ function getYouTubeIdFromUrl(urlOrDomain: string) {
   return null;
 }
 
-function isExternalEmbed(embed: BlueskyPost['embed']) {
-  return Boolean(embed?.external && embed.$type?.startsWith('app.bsky.embed.external'));
+function isExternalEmbed(embed: BlueskyPost["embed"]) {
+  return Boolean(
+    embed?.external && embed.$type?.startsWith("app.bsky.embed.external"),
+  );
 }
 
 function getYouTubeIdFromPost(post: BlueskyPost) {
@@ -138,16 +144,16 @@ function getYouTubeIdFromPost(post: BlueskyPost) {
 function isYouTubeUrl(urlOrDomain: string) {
   try {
     const url = new URL(normalizeUrl(urlOrDomain));
-    const hostname = url.hostname.replace(/^www\./, '');
-    return hostname === 'youtu.be' || hostname.endsWith('youtube.com');
+    const hostname = url.hostname.replace(/^www\./, "");
+    return hostname === "youtu.be" || hostname.endsWith("youtube.com");
   } catch {
     return false;
   }
 }
 
 type TextToken =
-  | { kind: 'text'; value: string }
-  | { kind: 'link'; value: string; href: string };
+  | { kind: "text"; value: string }
+  | { kind: "link"; value: string; href: string };
 
 function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
   const urlRegex =
@@ -161,20 +167,20 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
     const start = match.index ?? 0;
 
     if (start > lastIndex) {
-      tokens.push({ kind: 'text', value: text.slice(lastIndex, start) });
+      tokens.push({ kind: "text", value: text.slice(lastIndex, start) });
     }
 
-    const cleaned = raw.replace(/[)\].,!?]+$/, '');
+    const cleaned = raw.replace(/[)\].,!?]+$/, "");
     const trailing = raw.slice(cleaned.length);
 
-    tokens.push({ kind: 'link', value: cleaned, href: normalizeUrl(cleaned) });
-    if (trailing) tokens.push({ kind: 'text', value: trailing });
+    tokens.push({ kind: "link", value: cleaned, href: normalizeUrl(cleaned) });
+    if (trailing) tokens.push({ kind: "text", value: trailing });
 
     lastIndex = start + raw.length;
   }
 
   if (lastIndex < text.length) {
-    tokens.push({ kind: 'text', value: text.slice(lastIndex) });
+    tokens.push({ kind: "text", value: text.slice(lastIndex) });
   }
 
   return tokens;
@@ -182,119 +188,178 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
 ---
 
 <section class="my-12">
-  <div class="flex justify-between items-center mb-8 border-b-2 border-cyber-purple pb-4">
+  <div
+    class="border-cyber-purple mb-8 flex items-center justify-between border-b-2 pb-4"
+  >
     <h2 class="m-0 text-3xl">Latest Updates via Bluesky</h2>
-    <a href={`https://bsky.app/profile/${BLUESKY_HANDLE}`} target="_blank" rel="noopener noreferrer" class="text-sm uppercase tracking-widest font-semibold px-4 py-2 border border-cyber-cyan rounded transition-all duration-300 hover:bg-cyber-cyan/10 hover:shadow-glow-cyan">
+    <a
+      href={`https://bsky.app/profile/${BLUESKY_HANDLE}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="border-cyber-cyan hover:bg-cyber-cyan/10 hover:shadow-glow-cyan rounded border px-4 py-2 text-sm font-semibold tracking-widest uppercase transition-all duration-300"
+    >
       View on Bluesky →
     </a>
   </div>
 
-  {error ? (
-    <div class="p-8 text-center text-[#ff6b6b] border border-[#ff6b6b] rounded-lg bg-[#ff6b6b]/10">
-      {error}
-    </div>
-  ) : (
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(350px,100%),1fr))] gap-8">
-      {posts.map((post) => (
-        <article class="p-6 bg-black/50 border border-cyber-purple rounded-lg transition-all duration-300 box-border hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(177,255,236,0.2)] hover:-translate-y-0.5">
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              {post.author.avatar && (
-                <img src={post.author.avatar} alt={post.author.displayName} class="w-12 h-12 rounded-full border-2 border-cyber-purple" />
-              )}
-              <div class="flex flex-col">
-                <span class="font-semibold text-cyber-cyan">{post.author.displayName}</span>
-                <span class="text-sm text-cyber-gray">@{post.author.handle}</span>
-              </div>
-            </div>
-            <time class="text-sm text-cyber-gray">{formatDate(post.record.createdAt)}</time>
-          </div>
-
-          <p class="my-4 leading-relaxed text-cyber-gray-dark whitespace-pre-wrap">{tokenizeTextWithYouTubeLinks(post.record.text).map((token) =>
-            token.kind === 'text' ? (
-              token.value
-            ) : (
-              <a
-                href={token.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-cyber-cyan no-underline break-words hover:text-white"
-              >
-                {token.value}
-              </a>
-            )
-          )}</p>
-
-          {(() => {
-            const youTubeId = getYouTubeIdFromPost(post);
-
-            if (!youTubeId) return null;
-
-            return (
-              <div class="my-4 rounded-lg overflow-hidden youtube-embed">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${youTubeId}`}
-                  title="YouTube video player"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  class="w-full block border border-cyber-purple bg-black transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
-                />
-              </div>
-            );
-          })()}
-
-          {post.embed?.images && post.embed.images.length > 0 && (
-            <div class={post.embed.images.length === 1 ? 'my-4 rounded-lg overflow-hidden max-w-full' : 'my-4 rounded-lg overflow-hidden grid grid-cols-2 gap-2'}>
-              {post.embed.images.map((image) => (
-                <a href={getPostUrl(post.uri)} target="_blank" rel="noopener noreferrer">
+  {
+    error ? (
+      <div class="rounded-lg border border-[#ff6b6b] bg-[#ff6b6b]/10 p-8 text-center text-[#ff6b6b]">
+        {error}
+      </div>
+    ) : (
+      <div class="bluesky-grid grid grid-cols-[repeat(auto-fit,minmax(min(350px,100%),1fr))] gap-8">
+        {posts.map((post) => (
+          <article class="border-cyber-purple hover:border-cyber-cyan box-border rounded-lg border bg-black/50 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                {post.author.avatar && (
                   <img
-                    src={image.fullsize}
-                    alt={image.alt || 'Post image'}
-                    loading="lazy"
-                    class={post.embed.images.length === 1 ? 'w-full h-auto block rounded-lg border border-cyber-purple transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]' : 'w-full h-[200px] object-cover rounded-lg border border-cyber-purple transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]'}
+                    src={post.author.avatar}
+                    alt={post.author.displayName}
+                    class="border-cyber-purple h-12 w-12 rounded-full border-2"
                   />
-                </a>
-              ))}
-            </div>
-          )}
-
-          {post.embed?.$type === 'app.bsky.embed.video#view' && post.embed.playlist && (
-            <div class="my-4 rounded-lg overflow-hidden">
-              <video
-                controls
-                poster={post.embed.thumbnail}
-                preload="metadata"
-                class="w-full h-auto block rounded-lg border border-cyber-purple bg-black transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
-              >
-                <source src={post.embed.playlist} type="application/x-mpegURL" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          )}
-
-          {isExternalEmbed(post.embed) && post.embed?.external && !isYouTubeUrl(post.embed.external.uri) && (
-            <a href={post.embed.external.uri} target="_blank" rel="noopener noreferrer" class="flex gap-4 p-4 my-4 bg-black/30 border border-cyber-purple rounded-lg no-underline transition-all duration-300 hover:border-cyber-cyan hover:bg-cyber-cyan/5">
-              {post.embed.external.thumb && (
-                <img src={post.embed.external.thumb} alt={post.embed.external.title} class="w-[120px] h-[120px] object-cover rounded border border-cyber-purple flex-shrink-0" />
-              )}
-              <div class="flex-1 flex flex-col gap-2">
-                <div class="font-semibold text-cyber-cyan text-base">{post.embed.external.title}</div>
-                {post.embed.external.description && (
-                  <div class="text-sm text-cyber-gray leading-snug line-clamp-2">{post.embed.external.description}</div>
                 )}
+                <div class="flex flex-col">
+                  <span class="text-cyber-cyan font-semibold">
+                    {post.author.displayName}
+                  </span>
+                  <span class="text-cyber-gray text-sm">
+                    @{post.author.handle}
+                  </span>
+                </div>
               </div>
-            </a>
-          )}
+              <time class="text-cyber-gray text-sm">
+                {formatDate(post.record.createdAt)}
+              </time>
+            </div>
 
-          <a href={getPostUrl(post.uri)} target="_blank" rel="noopener noreferrer" class="inline-block text-sm mt-2 text-cyber-cyan font-medium">
-            View post →
-          </a>
-        </article>
-      ))}
-    </div>
-  )}
+            <p class="text-cyber-gray-dark my-4 leading-relaxed whitespace-pre-line">
+              {tokenizeTextWithYouTubeLinks(post.record.text).map((token) =>
+                token.kind === "text" ? (
+                  token.value
+                ) : (
+                  <a
+                    href={token.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-cyber-cyan break-words no-underline hover:text-white"
+                  >
+                    {token.value}
+                  </a>
+                ),
+              )}
+            </p>
+
+            {(() => {
+              const youTubeId = getYouTubeIdFromPost(post);
+
+              if (!youTubeId) return null;
+
+              return (
+                <div class="youtube-embed my-4 overflow-hidden rounded-lg">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${youTubeId}`}
+                    title="YouTube video player"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    class="border-cyber-purple hover:border-cyber-cyan block w-full border bg-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                  />
+                </div>
+              );
+            })()}
+
+            {post.embed?.images && post.embed.images.length > 0 && (
+              <div
+                class={
+                  post.embed.images.length === 1
+                    ? "my-4 max-w-full overflow-hidden rounded-lg"
+                    : "my-4 grid grid-cols-2 gap-2 overflow-hidden rounded-lg"
+                }
+              >
+                {post.embed.images.map((image) => (
+                  <a
+                    href={getPostUrl(post.uri)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={image.fullsize}
+                      alt={image.alt || "Post image"}
+                      loading="lazy"
+                      class={
+                        post.embed.images.length === 1
+                          ? "border-cyber-purple hover:border-cyber-cyan block h-auto w-full rounded-lg border transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                          : "border-cyber-purple hover:border-cyber-cyan h-[200px] w-full rounded-lg border object-cover transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                      }
+                    />
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {post.embed?.$type === "app.bsky.embed.video#view" &&
+              post.embed.playlist && (
+                <div class="my-4 overflow-hidden rounded-lg">
+                  <video
+                    controls
+                    poster={post.embed.thumbnail}
+                    preload="metadata"
+                    class="border-cyber-purple hover:border-cyber-cyan block h-auto w-full rounded-lg border bg-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                  >
+                    <source
+                      src={post.embed.playlist}
+                      type="application/x-mpegURL"
+                    />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              )}
+
+            {isExternalEmbed(post.embed) &&
+              post.embed?.external &&
+              !isYouTubeUrl(post.embed.external.uri) && (
+                <a
+                  href={post.embed.external.uri}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="border-cyber-purple hover:border-cyber-cyan hover:bg-cyber-cyan/5 my-4 flex gap-4 rounded-lg border bg-black/30 p-4 no-underline transition-all duration-300"
+                >
+                  {post.embed.external.thumb && (
+                    <img
+                      src={post.embed.external.thumb}
+                      alt={post.embed.external.title}
+                      class="border-cyber-purple h-[120px] w-[120px] flex-shrink-0 rounded border object-cover"
+                    />
+                  )}
+                  <div class="flex flex-1 flex-col gap-2">
+                    <div class="text-cyber-cyan text-base font-semibold">
+                      {post.embed.external.title}
+                    </div>
+                    {post.embed.external.description && (
+                      <div class="text-cyber-gray line-clamp-2 text-sm leading-snug">
+                        {post.embed.external.description}
+                      </div>
+                    )}
+                  </div>
+                </a>
+              )}
+
+            <a
+              href={getPostUrl(post.uri)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-cyber-cyan mt-2 inline-block text-sm font-medium"
+            >
+              View post →
+            </a>
+          </article>
+        ))}
+      </div>
+    )
+  }
 </section>
 
 <style>
@@ -311,7 +376,7 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
   }
 
   @media (max-width: 1024px) {
-    .grid-cols-\[repeat\(auto-fit\2c minmax\(min\(350px\2c 100\%\)\2c 1fr\)\)\] {
+    .bluesky-grid {
       grid-template-columns: 1fr !important;
     }
   }
