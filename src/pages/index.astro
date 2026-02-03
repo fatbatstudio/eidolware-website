@@ -1,10 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import BlueskyFeed from '../components/BlueskyFeed.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getCollection } from 'astro:content';
+import eidolwareLogo from '../assets/eidolware_logo.png';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -27,7 +29,17 @@ const posts = (await getCollection('blog')).sort(
 					</p>
 
 					<!-- Logo/Title -->
-					<h1 class="hero-title text-7xl md:text-8xl lg:text-9xl mb-4 font-bold tracking-tight">[EIDOLWARE]</h1>
+					<h1 class="hero-title mb-4">
+						<Image
+							src={eidolwareLogo}
+							alt="EIDOLWARE"
+							width={1200}
+							height={257}
+							class="hero-logo"
+							loading="eager"
+							decoding="async"
+						/>
+					</h1>
 
 					<!-- Tagline -->
 					<p class="hero-tagline text-xl text-cyber-gray-dark mb-8 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
@@ -55,7 +67,7 @@ const posts = (await getCollection('blog')).sort(
 			</section>
 
 			<section class="my-12 p-8 bg-black/50 border border-cyber-purple rounded-lg box-border">
-				<h2 class="mt-0 text-3xl">About the Game</h2>
+				<h2 class="mt-0 text-3xl">Uncover the Truth</h2>
 				<p class="text-lg leading-relaxed font-bold">
 					Infiltrate a 24/7 anime convention where holograms are real, influencers reign supreme, and Otaku culture has gone completely off the rails in this satirical action-RPG by FATBAT Studio.
 				</p>
@@ -72,7 +84,7 @@ const posts = (await getCollection('blog')).sort(
 			{posts.length > 0 && (
 				<section class="my-12">
 					<div class="flex justify-between items-center mb-8 border-b-2 border-cyber-purple pb-4">
-						<h2 class="m-0 text-3xl">Devlog</h2>
+						<h2 class="m-0 text-3xl">Monthly Devlog</h2>
 						<a href="/blog" class="text-sm uppercase tracking-widest font-semibold px-4 py-2 border border-cyber-cyan rounded transition-all duration-300 hover:bg-cyber-cyan/10 hover:shadow-glow-cyan">View all posts →</a>
 					</div>
 					<div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-8">
@@ -136,8 +148,19 @@ const posts = (await getCollection('blog')).sort(
 
 	.hero-title {
 		/* Use the standard h1 glow like on the character page */
+		display: flex;
+		justify-content: center;
 		text-shadow: 0 0 10px rgba(177, 255, 236, 0.8), 0 0 20px rgba(177, 255, 236, 0.6), 0 0 30px rgba(177, 255, 236, 0.4);
 		animation: scaleIn 0.6s ease-out 0.4s backwards, flicker 4s linear 1s infinite;
+	}
+
+	.hero-logo {
+		width: min(1100px, 92vw);
+		height: auto;
+		filter:
+			drop-shadow(0 0 10px rgba(177, 255, 236, 0.8))
+			drop-shadow(0 0 20px rgba(177, 255, 236, 0.6))
+			drop-shadow(0 0 30px rgba(177, 255, 236, 0.4));
 	}
 
 	.hero-tagline {
@@ -159,8 +182,11 @@ const posts = (await getCollection('blog')).sort(
 
 	@media (max-width: 720px) {
 		.hero-title {
-			font-size: 2rem !important;
 			margin-bottom: 0.75rem !important;
+		}
+
+		.hero-logo {
+			width: min(520px, 92vw);
 		}
 
 		.text-xl {

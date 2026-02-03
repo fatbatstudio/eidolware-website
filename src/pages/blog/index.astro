@@ -20,6 +20,11 @@ const posts = (await getCollection('blog')).sort(
 	<body>
 		<Header />
 		<main class="w-full max-w-site">
+			<section class="text-center py-12 mb-12 border-b-2 border-cyber-purple">
+				<h1 class="text-6xl mb-4">Monthly Devlog</h1>
+				<p class="text-xl text-cyber-gray m-0">Development updates and behind-the-scenes insights</p>
+			</section>
+
 			<section>
 				<ul class="flex flex-wrap gap-8 list-none m-0 p-0">
 					{

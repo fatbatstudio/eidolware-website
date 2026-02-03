@@ -4,8 +4,10 @@ dist/
 # generated types
 .astro/
 
-# Ignore Claude Code files and directories
+# Ignore Codex/Claude files and directories
 .claude/
+.codex/
+AGENTS.md
 
 # IDE files
 .vscode/
