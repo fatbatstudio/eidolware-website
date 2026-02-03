@@ -210,22 +210,20 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
             <time class="text-sm text-cyber-gray">{formatDate(post.record.createdAt)}</time>
           </div>
 
-          <p class="my-4 leading-relaxed text-cyber-gray-dark whitespace-pre-wrap">
-            {tokenizeTextWithYouTubeLinks(post.record.text).map((token) =>
-              token.kind === 'text' ? (
-                token.value
-              ) : (
-                <a
-                  href={token.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-cyber-cyan underline break-words hover:text-white"
-                >
-                  {token.value}
-                </a>
-              )
-            )}
-          </p>
+          <p class="my-4 leading-relaxed text-cyber-gray-dark whitespace-pre-wrap">{tokenizeTextWithYouTubeLinks(post.record.text).map((token) =>
+            token.kind === 'text' ? (
+              token.value
+            ) : (
+              <a
+                href={token.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-cyber-cyan no-underline break-words hover:text-white"
+              >
+                {token.value}
+              </a>
+            )
+          )}</p>
 
           {(() => {
             const youTubeId = getYouTubeIdFromPost(post);

@@ -1,220 +1,285 @@
 ---
-import { Image } from 'astro:assets';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import BlueskyFeed from '../components/BlueskyFeed.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
-import eidolwareLogo from '../assets/eidolware_logo.png';
+import { Image } from "astro:assets";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import BlueskyFeed from "../components/BlueskyFeed.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { getCollection } from "astro:content";
+import eidolwareLogo from "../assets/eidolware_logo.png";
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-).slice(0, 3);
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="text-center py-16 mb-12">
-				<div class="hero-content">
-					<!-- Developer tag -->
-					<p class="hero-tag text-cyber-purple uppercase tracking-[0.3em] text-sm font-medium mb-6">
-						FATBAT Studio Presents
-					</p>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="mb-12 py-16 text-center">
+        <div class="hero-content">
+          <!-- Developer tag -->
+          <p
+            class="hero-tag text-cyber-purple mb-6 text-sm font-medium tracking-[0.3em] uppercase"
+          >
+            FATBAT Studio Presents
+          </p>
 
-					<!-- Logo/Title -->
-					<h1 class="hero-title mb-4">
-						<Image
-							src={eidolwareLogo}
-							alt="EIDOLWARE"
-							width={1200}
-							height={257}
-							class="hero-logo"
-							loading="eager"
-							decoding="async"
-						/>
-					</h1>
+          <!-- Logo/Title -->
+          <h1 class="hero-title mb-4">
+            <Image
+              src={eidolwareLogo}
+              alt="EIDOLWARE"
+              width={1200}
+              height={257}
+              class="hero-logo"
+              loading="eager"
+              decoding="async"
+            />
+          </h1>
 
-					<!-- Tagline -->
-					<p class="hero-tagline text-xl text-cyber-gray-dark mb-8 max-w-3xl mx-auto">{SITE_DESCRIPTION}</p>
+          <!-- Tagline -->
+          <p
+            class="hero-tagline text-cyber-gray-dark mx-auto mb-8 max-w-3xl text-xl"
+          >
+            {SITE_DESCRIPTION}
+          </p>
 
-					<!-- Status badge -->
-					<div class="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyber-cyan/30 bg-black/50 backdrop-blur-sm mb-8">
-						<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-						<span class="text-sm text-cyber-gray uppercase tracking-wider">In Development</span>
-					</div>
+          <!-- Status badge -->
+          <div
+            class="hero-badge border-cyber-cyan/30 mb-8 inline-flex items-center gap-2 rounded-full border bg-black/50 px-4 py-2 backdrop-blur-sm"
+          >
+            <span class="h-2 w-2 animate-pulse rounded-full bg-green-500"
+            ></span>
+            <span class="text-cyber-gray text-sm tracking-wider uppercase"
+              >In Development</span
+            >
+          </div>
 
-					<!-- CTA Buttons -->
-					<div class="hero-buttons flex gap-4 justify-center flex-wrap">
-						<a href="https://fatbatstudio.itch.io/eidolware" target="_blank" rel="noopener noreferrer" class="group relative px-8 py-4 rounded-lg font-semibold uppercase tracking-widest transition-all duration-300 text-base bg-cyber-purple text-cyber-cyan border-2 border-cyber-purple overflow-hidden hover:shadow-glow-purple hover:-translate-y-0.5 hover:border-cyber-cyan">
-							<span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[shine_3s_infinite]"></span>
-							<span class="relative z-10">Follow on itch.io</span>
-						</a>
-						<a href="#" class="px-8 py-4 rounded-lg font-semibold uppercase tracking-widest transition-all duration-300 text-base bg-transparent text-[#66c0f4] border-2 border-[#1b2838] hover:shadow-[0_0_20px_rgba(102,192,244,0.2)] hover:-translate-y-0.5 hover:border-[#66c0f4] hover:bg-[#66c0f4]/5" title="Coming Soon">
-							Steam Coming Soon
-						</a>
-						<a href="/blog" class="px-8 py-4 rounded-lg font-semibold uppercase tracking-widest transition-all duration-300 text-base bg-transparent text-cyber-cyan border-2 border-cyber-cyan hover:bg-cyber-cyan/10 hover:shadow-glow-cyan hover:-translate-y-0.5">
-							Devlog
-						</a>
-					</div>
-				</div>
-			</section>
+          <!-- CTA Buttons -->
+          <div class="hero-buttons flex flex-wrap justify-center gap-4">
+            <a
+              href="https://fatbatstudio.itch.io/eidolware"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group bg-cyber-purple text-cyber-cyan border-cyber-purple hover:shadow-glow-purple hover:border-cyber-cyan relative overflow-hidden rounded-lg border-2 px-8 py-4 text-base font-semibold tracking-widest uppercase transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <span
+                class="absolute inset-0 -translate-x-full animate-[shine_3s_infinite] bg-gradient-to-r from-transparent via-white/50 to-transparent"
+              ></span>
+              <span class="relative z-10">Follow on itch.io</span>
+            </a>
+            <a
+              href="#"
+              class="rounded-lg border-2 border-[#1b2838] bg-transparent px-8 py-4 text-base font-semibold tracking-widest text-[#66c0f4] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-[#66c0f4] hover:bg-[#66c0f4]/5 hover:shadow-[0_0_20px_rgba(102,192,244,0.2)]"
+              title="Coming Soon"
+            >
+              Steam Coming Soon
+            </a>
+            <a
+              href="/blog"
+              class="text-cyber-cyan border-cyber-cyan hover:bg-cyber-cyan/10 hover:shadow-glow-cyan rounded-lg border-2 bg-transparent px-8 py-4 text-base font-semibold tracking-widest uppercase transition-all duration-300 hover:-translate-y-0.5"
+            >
+              Devlog
+            </a>
+          </div>
+        </div>
+      </section>
 
-			<section class="my-12 p-8 bg-black/50 border border-cyber-purple rounded-lg box-border">
-				<h2 class="mt-0 text-3xl">Uncover the Truth</h2>
-				<p class="text-lg leading-relaxed font-bold">
-					Infiltrate a 24/7 anime convention where holograms are real, influencers reign supreme, and Otaku culture has gone completely off the rails in this satirical action-RPG by FATBAT Studio.
-				</p>
-				<p class="text-lg leading-relaxed">
-					You are Anna Lam, a former AI engineer. The mysterious death of your mentor has led you to a newly established 24-hour anime convention, owned and operated by a crypto-billionaire who styles himself "Fedora Mask".
-				</p>
-				<p class="text-lg leading-relaxed">
-					Immerse yourself in the convention and meet its strange denizens. Team up with unlikely allies to defeat Fedora Mask's lieutenants and gain access to the convention's inner circle. Uncover the truth behind your mentor's death and if anyone is responsible, put an end to their plans.
-				</p>
-			</section>
+      <section
+        class="border-cyber-purple my-12 box-border rounded-lg border bg-black/50 p-8"
+      >
+        <h2 class="mt-0 text-3xl">Uncover the Truth</h2>
+        <p class="text-lg leading-relaxed font-bold">
+          Infiltrate a 24/7 anime convention where holograms are real,
+          influencers reign supreme, and Otaku culture has gone completely off
+          the rails in this satirical cyberpunk action-RPG by FATBAT Studio.
+        </p>
+        <p class="text-lg leading-relaxed">
+          You are Anna Lam, a former AI engineer. The mysterious death of your
+          mentor has led you to a newly established 24-hour anime convention,
+          owned and operated by a crypto-billionaire who styles himself "Fedora
+          Mask".
+        </p>
+        <p class="text-lg leading-relaxed">
+          Immerse yourself in the convention and meet its strange denizens. Team
+          up with unlikely allies to defeat Fedora Mask's lieutenants and gain
+          access to the convention's inner circle. Uncover the truth behind your
+          mentor's death and if anyone is responsible, put an end to their
+          plans.
+        </p>
+      </section>
 
-			<BlueskyFeed />
+      <BlueskyFeed />
 
-			{posts.length > 0 && (
-				<section class="my-12">
-					<div class="flex justify-between items-center mb-8 border-b-2 border-cyber-purple pb-4">
-						<h2 class="m-0 text-3xl">Monthly Devlog</h2>
-						<a href="/blog" class="text-sm uppercase tracking-widest font-semibold px-4 py-2 border border-cyber-cyan rounded transition-all duration-300 hover:bg-cyber-cyan/10 hover:shadow-glow-cyan">View all posts →</a>
-					</div>
-					<div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-8">
-						{posts.map((post) => (
-							<article class="p-6 bg-black/50 border border-cyber-purple rounded-lg transition-all duration-300 hover:border-cyber-cyan hover:shadow-[0_0_20px_rgba(177,255,236,0.2)] hover:-translate-y-0.5">
-								<a href={`/blog/${post.id}/`} class="no-underline text-inherit">
-									<h3 class="text-xl mb-2 text-cyber-cyan">{post.data.title}</h3>
-									<time class="text-sm text-cyber-gray block mb-3">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
-									<p class="text-cyber-gray-dark leading-relaxed m-0">{post.data.description}</p>
-								</a>
-							</article>
-						))}
-					</div>
-				</section>
-			)}
-		</main>
-		<Footer />
-	</body>
+      {
+        posts.length > 0 && (
+          <section class="my-12">
+            <div class="border-cyber-purple mb-8 flex items-center justify-between border-b-2 pb-4">
+              <h2 class="m-0 text-3xl">Monthly Devlog</h2>
+              <a
+                href="/blog"
+                class="border-cyber-cyan hover:bg-cyber-cyan/10 hover:shadow-glow-cyan rounded border px-4 py-2 text-sm font-semibold tracking-widest uppercase transition-all duration-300"
+              >
+                View all posts →
+              </a>
+            </div>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-8">
+              {posts.map((post) => (
+                <article class="border-cyber-purple hover:border-cyber-cyan rounded-lg border bg-black/50 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+                  <a
+                    href={`/blog/${post.id}/`}
+                    class="text-inherit no-underline"
+                  >
+                    <h3 class="text-cyber-cyan mb-2 text-xl">
+                      {post.data.title}
+                    </h3>
+                    <time class="text-cyber-gray mb-3 block text-sm">
+                      {post.data.pubDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </time>
+                    <p class="text-cyber-gray-dark m-0 leading-relaxed">
+                      {post.data.description}
+                    </p>
+                  </a>
+                </article>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	/* Hero animations */
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  /* Hero animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
-	@keyframes scaleIn {
-		from {
-			opacity: 0;
-			transform: scale(0.9);
-		}
-		to {
-			opacity: 1;
-			transform: scale(1);
-		}
-	}
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
-	.hero-content {
-		animation: fadeInUp 0.8s ease-out;
-	}
+  .hero-content {
+    animation: fadeInUp 0.8s ease-out;
+  }
 
-	.hero-tag {
-		animation: fadeIn 0.6s ease-out 0.2s backwards;
-	}
+  .hero-tag {
+    animation: fadeIn 0.6s ease-out 0.2s backwards;
+  }
 
-	.hero-title {
-		/* Use the standard h1 glow like on the character page */
-		display: flex;
-		justify-content: center;
-		text-shadow: 0 0 10px rgba(177, 255, 236, 0.8), 0 0 20px rgba(177, 255, 236, 0.6), 0 0 30px rgba(177, 255, 236, 0.4);
-		animation: scaleIn 0.6s ease-out 0.4s backwards, flicker 4s linear 1s infinite;
-	}
+  .hero-title {
+    /* Use the standard h1 glow like on the character page */
+    display: flex;
+    justify-content: center;
+    text-shadow:
+      0 0 10px rgba(177, 255, 236, 0.8),
+      0 0 20px rgba(177, 255, 236, 0.6),
+      0 0 30px rgba(177, 255, 236, 0.4);
+    animation:
+      scaleIn 0.6s ease-out 0.4s backwards,
+      flicker 4s linear 1s infinite;
+  }
 
-	.hero-logo {
-		width: min(1100px, 92vw);
-		height: auto;
-	}
+  .hero-logo {
+    width: min(1100px, 92vw);
+    height: auto;
+  }
 
-	.hero-tagline {
-		animation: fadeIn 0.6s ease-out 0.6s backwards;
-	}
+  .hero-tagline {
+    animation: fadeIn 0.6s ease-out 0.6s backwards;
+  }
 
-	.hero-badge {
-		animation: fadeIn 0.6s ease-out 0.8s backwards;
-	}
+  .hero-badge {
+    animation: fadeIn 0.6s ease-out 0.8s backwards;
+  }
 
-	.hero-buttons {
-		animation: fadeInUp 0.6s ease-out 1s backwards;
-	}
+  .hero-buttons {
+    animation: fadeInUp 0.6s ease-out 1s backwards;
+  }
 
-	@keyframes shine {
-		0% { transform: translateX(0); }
-		100% { transform: translateX(200%); }
-	}
+  @keyframes shine {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
 
-	@media (max-width: 720px) {
-		.hero-title {
-			margin-bottom: 0.75rem !important;
-		}
+  @media (max-width: 720px) {
+    .hero-title {
+      margin-bottom: 0.75rem !important;
+    }
 
-		.hero-logo {
-			width: min(520px, 92vw);
-		}
+    .hero-logo {
+      width: min(520px, 92vw);
+    }
 
-		.text-xl {
-			font-size: 1rem !important;
-		}
+    .text-xl {
+      font-size: 1rem !important;
+    }
 
-		.flex.gap-4 {
-			flex-direction: column !important;
-			gap: 0.75rem !important;
-		}
+    .flex.gap-4 {
+      flex-direction: column !important;
+      gap: 0.75rem !important;
+    }
 
-		.px-8.py-4 {
-			width: 100% !important;
-			max-width: 100% !important;
-			padding: 0.875rem 1rem !important;
-			font-size: 0.9rem !important;
-			box-sizing: border-box !important;
-		}
+    .px-8.py-4 {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0.875rem 1rem !important;
+      font-size: 0.9rem !important;
+      box-sizing: border-box !important;
+    }
 
-		section.p-8 {
-			padding: 1.5rem 1rem !important;
-			margin: 2rem 0 !important;
-		}
+    section.p-8 {
+      padding: 1.5rem 1rem !important;
+      margin: 2rem 0 !important;
+    }
 
-		.flex.justify-between {
-			flex-direction: column !important;
-			align-items: flex-start !important;
-			gap: 1rem !important;
-		}
+    .flex.justify-between {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 1rem !important;
+    }
 
-		.grid {
-			grid-template-columns: 1fr !important;
-		}
-	}
+    .grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
 </style>

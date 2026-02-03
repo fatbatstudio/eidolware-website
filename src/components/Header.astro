@@ -1,12 +1,24 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import eidolwareLogoSmall from '../assets/eidolware_logo_small.png';
 ---
 
 <header class="m-0 bg-black/80 border-b border-cyber-purple w-full box-border shadow-[0_4px_20px_rgba(109,31,104,0.3)] backdrop-blur-md">
 	<nav class="grid grid-cols-[1fr_auto_1fr] items-center w-full max-w-site mx-auto relative px-8">
 		<h2 class="m-0 text-2xl font-display font-extrabold justify-self-start">
-			<a href="/" class="header-logo no-underline">{SITE_TITLE}</a>
+			<a href="/" class="header-logo no-underline" aria-label={SITE_TITLE}>
+				<Image
+					src={eidolwareLogoSmall}
+					alt={SITE_TITLE}
+					width={362}
+					height={67}
+					class="header-logo-img"
+					loading="eager"
+					decoding="async"
+				/>
+			</a>
 		</h2>
 		<div class="flex gap-2 justify-center">
 			<HeaderLink href="/">Home</HeaderLink>
@@ -40,17 +52,14 @@ import HeaderLink from './HeaderLink.astro';
 
 <style>
 	.header-logo {
-		background: linear-gradient(135deg, var(--cyber-cyan) 0%, var(--cyber-purple) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		/* Fallback for browsers that don't support background-clip */
-		color: var(--cyber-cyan);
+		display: inline-flex;
+		align-items: center;
+		padding: 0.35rem 0;
 	}
 
-	/* Override the global a tag color for the logo */
-	.header-logo:hover {
-		text-shadow: none;
+	.header-logo-img {
+		width: 180px;
+		height: auto;
 	}
 
 	@media (max-width: 720px) {
@@ -64,6 +73,10 @@ import HeaderLink from './HeaderLink.astro';
 			font-size: 1.1em !important;
 			justify-self: center !important;
 			text-align: center !important;
+		}
+
+		.header-logo-img {
+			width: 160px;
 		}
 
 		.flex.gap-2 {
