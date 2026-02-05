@@ -187,16 +187,21 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
 }
 ---
 
-<section class="max-w-site mx-auto my-12 px-8">
-  <div
-    class="border-cyber-pink mb-8 flex items-center justify-between border-b-2 pb-4"
-  >
-    <h2 class="m-0 text-3xl">Latest Updates via Bluesky</h2>
+<section class="bluesky-section">
+  <div class="section-head">
+    <div class="num-block num-pink">
+      <span class="num">03</span>
+    </div>
+    <div class="head-text">
+      <span class="head-jp">最新情報</span>
+      <h2 class="head-title">Latest Updates</h2>
+    </div>
+    <div class="head-rule"></div>
     <a
       href={`https://bsky.app/profile/${BLUESKY_HANDLE}`}
       target="_blank"
       rel="noopener noreferrer"
-      class="border-cyber-cyan hover:bg-cyber-cyan/10 hover:shadow-glow-cyan rounded border px-4 py-2 text-sm font-semibold tracking-widest uppercase transition-all duration-300"
+      class="bluesky-link"
     >
       View on Bluesky →
     </a>
@@ -363,6 +368,90 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
 </section>
 
 <style>
+  .bluesky-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+    border-bottom: 1px solid #12121e;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .num-block {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;
+    flex-shrink: 0;
+  }
+
+  .num-pink {
+    border-color: #e8157a;
+  }
+
+  .num {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.8rem;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .head-jp {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #00e5c3;
+    letter-spacing: 0.2em;
+  }
+
+  .head-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.08em;
+    color: #fff;
+    margin: 0;
+    text-shadow: none;
+    text-transform: uppercase;
+  }
+
+  .head-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #1a1a28, transparent);
+  }
+
+  .bluesky-link {
+    margin-left: auto;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #e8157a;
+    border: 1px solid #e8157a;
+    padding: 0.4rem 1rem;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .bluesky-link:hover {
+    background: #e8157a;
+    color: #fff;
+  }
+
   .youtube-embed iframe {
     aspect-ratio: 16 / 9;
     height: auto;
@@ -382,14 +471,26 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
   }
 
   @media (max-width: 720px) {
-    section {
-      margin: 2rem 0 !important;
+    .bluesky-section {
+      padding: 2.5rem 1.25rem;
     }
 
-    .flex.justify-between {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 1rem !important;
+    .section-head {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .num-block {
+      width: 45px;
+      height: 45px;
+    }
+
+    .num {
+      font-size: 1.4rem;
+    }
+
+    .head-title {
+      font-size: 1.6rem;
     }
 
     article {

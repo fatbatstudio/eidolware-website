@@ -107,7 +107,6 @@ const posts = (await getCollection("blog"))
       </div>
 
       <section class="story story-no-head">
-
         <div class="story-grid">
           <div class="story-card card-lead">
             <div class="card-edge edge-pink"></div>
@@ -161,7 +160,7 @@ const posts = (await getCollection("blog"))
             <span class="num">02</span>
           </div>
           <div class="head-text">
-            <span class="head-jp">特徴</span>
+            <span class="head-jp">フェドラコンが待つ</span>
             <h2 class="head-title">FedoraCon Awaits</h2>
           </div>
         </div>
@@ -177,9 +176,9 @@ const posts = (await getCollection("blog"))
             </div>
             <h3>Underground Convention</h3>
             <p>
-              A 24/7 anime convention in an underground bunker, powered by
-              holographic technology and funded by a crypto-billionaire's dream
-              of making anime real.
+              Enter FedoraCon, a 24/7 anime convention in an underground bunker,
+              powered by holographic technology and funded by a
+              crypto-billionaire's dream of making anime real.
             </p>
           </div>
           <div class="feature">
@@ -191,8 +190,9 @@ const posts = (await getCollection("blog"))
             <h3>Distinct Wings</h3>
             <p>
               Explore themed convention wings: an artist alley that turns into a
-              haunted forest, a ballroom dance-off, a cosplay battle royale, and
-              secret areas, each run by a lieutenant with their own rules.
+              haunted forest, a ballroom dance-off maze, a cosplay battle
+              royale, and secret areas, each run by a lieutenant with their own
+              rules.
             </p>
           </div>
           <div class="feature">
@@ -203,9 +203,10 @@ const posts = (await getCollection("blog"))
             </div>
             <h3>Eccentric Cast</h3>
             <p>
-              A Halloween obsessive, a K-Pop dancer who only speaks through
-              movement, a kawaii influencer, a vinyl figure mystic, and a masked
-              billionaire who thinks he's a Level 20 Paladin.
+              A Halloween obsessive lifestylist, a K-Pop star who only speaks
+              through dance, a corporate-sponsored kawaii influencer, a
+              conspirophile vinyl figure collector, and a masked billionaire who
+              thinks he's a Level 20 Paladin.
             </p>
           </div>
         </div>
@@ -218,7 +219,7 @@ const posts = (await getCollection("blog"))
           <section class="devlog">
             <div class="section-head">
               <div class="num-block num-pink">
-                <span class="num">03</span>
+                <span class="num">04</span>
               </div>
               <div class="head-text">
                 <span class="head-jp">開発日記</span>
@@ -288,7 +289,11 @@ const posts = (await getCollection("blog"))
       linear-gradient(rgba(232, 21, 122, 0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(232, 21, 122, 0.06) 1px, transparent 1px);
     background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 70%);
+    mask-image: radial-gradient(
+      ellipse 80% 70% at 50% 40%,
+      black 20%,
+      transparent 70%
+    );
   }
 
   .glow {
@@ -550,7 +555,7 @@ const posts = (await getCollection("blog"))
     height: 100%;
     width: auto;
     object-fit: contain;
-    filter: brightness(0.85) saturate(1.1);
+    filter: brightness(0.55) saturate(1.1);
   }
 
   .story-no-head {
