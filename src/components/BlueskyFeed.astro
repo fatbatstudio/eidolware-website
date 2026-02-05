@@ -187,9 +187,9 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
 }
 ---
 
-<section class="my-12">
+<section class="max-w-site mx-auto my-12 px-8">
   <div
-    class="border-cyber-purple mb-8 flex items-center justify-between border-b-2 pb-4"
+    class="border-cyber-pink mb-8 flex items-center justify-between border-b-2 pb-4"
   >
     <h2 class="m-0 text-3xl">Latest Updates via Bluesky</h2>
     <a
@@ -210,14 +210,14 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
     ) : (
       <div class="bluesky-grid grid grid-cols-[repeat(auto-fit,minmax(min(350px,100%),1fr))] gap-8">
         {posts.map((post) => (
-          <article class="border-cyber-purple hover:border-cyber-cyan box-border rounded-lg border bg-black/50 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+          <article class="border-cyber-pink hover:border-cyber-cyan box-border rounded-lg border bg-black/50 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(0,229,195,0.2)]">
             <div class="mb-4 flex items-start justify-between">
               <div class="flex items-center gap-3">
                 {post.author.avatar && (
                   <img
                     src={post.author.avatar}
                     alt={post.author.displayName}
-                    class="border-cyber-purple h-12 w-12 rounded-full border-2"
+                    class="border-cyber-pink h-12 w-12 rounded-full border-2"
                   />
                 )}
                 <div class="flex flex-col">
@@ -265,7 +265,7 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen
                     referrerpolicy="strict-origin-when-cross-origin"
-                    class="border-cyber-purple hover:border-cyber-cyan block w-full border bg-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                    class="border-cyber-pink hover:border-cyber-cyan block w-full border bg-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,229,195,0.3)]"
                   />
                 </div>
               );
@@ -290,9 +290,9 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
                       alt={image.alt || "Post image"}
                       loading="lazy"
                       class={
-                        post.embed.images.length === 1
-                          ? "border-cyber-purple hover:border-cyber-cyan block h-auto w-full rounded-lg border transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
-                          : "border-cyber-purple hover:border-cyber-cyan h-[200px] w-full rounded-lg border object-cover transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                        post.embed?.images?.length === 1
+                          ? "border-cyber-pink hover:border-cyber-cyan block h-auto w-full rounded-lg border transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,229,195,0.3)]"
+                          : "border-cyber-pink hover:border-cyber-cyan h-[200px] w-full rounded-lg border object-cover transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,229,195,0.3)]"
                       }
                     />
                   </a>
@@ -307,7 +307,7 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
                     controls
                     poster={post.embed.thumbnail}
                     preload="metadata"
-                    class="border-cyber-purple hover:border-cyber-cyan block h-auto w-full rounded-lg border bg-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(177,255,236,0.3)]"
+                    class="border-cyber-pink hover:border-cyber-cyan block h-auto w-full rounded-lg border bg-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,229,195,0.3)]"
                   >
                     <source
                       src={post.embed.playlist}
@@ -325,13 +325,13 @@ function tokenizeTextWithYouTubeLinks(text: string): TextToken[] {
                   href={post.embed.external.uri}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="border-cyber-purple hover:border-cyber-cyan hover:bg-cyber-cyan/5 my-4 flex gap-4 rounded-lg border bg-black/30 p-4 no-underline transition-all duration-300"
+                  class="border-cyber-pink hover:border-cyber-cyan hover:bg-cyber-cyan/5 my-4 flex gap-4 rounded-lg border bg-black/30 p-4 no-underline transition-all duration-300"
                 >
                   {post.embed.external.thumb && (
                     <img
                       src={post.embed.external.thumb}
                       alt={post.embed.external.title}
-                      class="border-cyber-purple h-[120px] w-[120px] flex-shrink-0 rounded border object-cover"
+                      class="border-cyber-pink h-[120px] w-[120px] flex-shrink-0 rounded border object-cover"
                     />
                   )}
                   <div class="flex flex-1 flex-col gap-2">

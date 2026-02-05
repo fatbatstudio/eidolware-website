@@ -5,14 +5,28 @@ import Header from "../components/Header.astro";
 import { SITE_TITLE } from "../consts";
 
 // Gameplay media (screenshots and YouTube videos)
-const gameplayMedia = [
+interface GameplayMedia {
+  type: "youtube" | "image";
+  id?: string;
+  src?: string;
+  alt?: string;
+  title?: string;
+}
+
+const gameplayMedia: GameplayMedia[] = [
   // Example entries - replace with actual content
   // { type: 'youtube', id: 'VIDEO_ID', title: 'Gameplay Trailer' },
   // { type: 'image', src: '/images/gameplay/screenshot1.jpg', alt: 'Combat scene' },
 ];
 
 // Artwork images
-const artworkImages = [
+interface ArtworkImage {
+  src: string;
+  alt: string;
+  title?: string;
+}
+
+const artworkImages: ArtworkImage[] = [
   // Example entries - replace with actual content
   // { src: '/images/artwork/concept1.jpg', alt: 'Character concept art', title: 'Anna Lam Concept' },
 ];
@@ -29,21 +43,21 @@ const artworkImages = [
   <body>
     <Header />
     <main>
-      <section class="border-cyber-purple mb-12 border-b-2 py-12 text-center">
+      <section class="border-cyber-pink mb-12 border-b-2 py-12 text-center">
         <h1 class="mb-4 text-6xl">Gallery</h1>
         <p class="text-cyber-gray m-0 text-xl">Visual showcase of EIDOLWARE</p>
       </section>
 
       <!-- Gameplay Section -->
       <section class="my-16">
-        <h2 class="border-cyber-purple mb-8 border-b pb-4 text-3xl">
+        <h2 class="border-cyber-pink mb-8 border-b pb-4 text-3xl">
           Gameplay
         </h2>
         {
           gameplayMedia.length > 0 ? (
             <div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-8">
               {gameplayMedia.map((media) => (
-                <div class="border-cyber-purple hover:border-cyber-cyan overflow-hidden rounded-lg border bg-black/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+                <div class="border-cyber-pink hover:border-cyber-cyan overflow-hidden rounded-lg border bg-black/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,229,195,0.2)]">
                   {media.type === "youtube" ? (
                     <div
                       class="relative w-full"
@@ -53,7 +67,7 @@ const artworkImages = [
                         class="absolute top-0 left-0 h-full w-full"
                         src={`https://www.youtube.com/embed/${media.id}`}
                         title={media.title}
-                        frameborder="0"
+                        style="border:0;"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                       />
@@ -76,7 +90,7 @@ const artworkImages = [
               ))}
             </div>
           ) : (
-            <div class="border-cyber-purple rounded-lg border border-dashed bg-black/30 p-12 text-center">
+            <div class="border-cyber-pink rounded-lg border border-dashed bg-black/30 p-12 text-center">
               <p class="text-cyber-gray m-0 text-xl italic">
                 Gameplay footage coming soon...
               </p>
@@ -87,12 +101,12 @@ const artworkImages = [
 
       <!-- Artwork Section -->
       <section class="my-16">
-        <h2 class="border-cyber-purple mb-8 border-b pb-4 text-3xl">Artwork</h2>
+        <h2 class="border-cyber-pink mb-8 border-b pb-4 text-3xl">Artwork</h2>
         {
           artworkImages.length > 0 ? (
             <div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-8">
               {artworkImages.map((artwork) => (
-                <div class="border-cyber-purple hover:border-cyber-cyan overflow-hidden rounded-lg border bg-black/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]">
+                <div class="border-cyber-pink hover:border-cyber-cyan overflow-hidden rounded-lg border bg-black/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,229,195,0.2)]">
                   <img
                     src={artwork.src}
                     alt={artwork.alt}
@@ -109,7 +123,7 @@ const artworkImages = [
               ))}
             </div>
           ) : (
-            <div class="border-cyber-purple rounded-lg border border-dashed bg-black/30 p-12 text-center">
+            <div class="border-cyber-pink rounded-lg border border-dashed bg-black/30 p-12 text-center">
               <p class="text-cyber-gray m-0 text-xl italic">
                 Artwork coming soon...
               </p>

@@ -17,7 +17,7 @@ import { protagonists, antagonists } from "../data/characters";
   <body>
     <Header />
     <main>
-      <section class="border-cyber-purple mb-12 border-b-2 py-12 text-center">
+      <section class="border-cyber-pink mb-12 border-b-2 py-12 text-center">
         <h1 class="mb-4 text-6xl">Characters</h1>
         <p class="text-cyber-gray m-0 text-xl">
           The characters in this twisted convention
@@ -25,7 +25,7 @@ import { protagonists, antagonists } from "../data/characters";
       </section>
 
       <section class="my-16">
-        <h2 class="border-cyber-purple mb-8 border-b pb-4 text-3xl">
+        <h2 class="border-cyber-pink mb-8 border-b pb-4 text-3xl">
           Protagonists
         </h2>
         <div
@@ -35,17 +35,17 @@ import { protagonists, antagonists } from "../data/characters";
             protagonists.map((character) => (
               <a
                 href={`/characters/${character.slug}`}
-                class="border-cyber-purple hover:border-cyber-cyan block cursor-pointer rounded-lg border bg-black/50 p-6 text-inherit no-underline transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(177,255,236,0.2)]"
+                class="border-cyber-pink hover:border-cyber-cyan block cursor-pointer rounded-lg border bg-black/50 p-6 text-inherit no-underline transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(0,229,195,0.2)]"
               >
                 <div class="mb-6 aspect-square w-full overflow-hidden rounded-lg">
                   {character.image ? (
                     <img
                       src={character.image}
                       alt={character.name}
-                      class="border-cyber-purple character-img h-full w-full rounded-lg border-2 object-cover transition-all duration-300"
+                      class="border-cyber-pink character-img h-full w-full rounded-lg border-2 object-cover transition-all duration-300"
                     />
                   ) : (
-                    <div class="character-placeholder from-cyber-purple-dark to-cyber-purple border-cyber-purple relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg border-2 bg-gradient-to-br">
+                    <div class="character-placeholder from-[#c0116a] to-[#e8157a] border-cyber-pink relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg border-2 bg-gradient-to-br">
                       <span class="font-display text-cyber-cyan character-question z-10 text-7xl">
                         ?
                       </span>
@@ -72,7 +72,7 @@ import { protagonists, antagonists } from "../data/characters";
           }
           {
             protagonists.length === 0 && (
-              <div class="border-cyber-purple col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
+              <div class="border-cyber-pink col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
                 <p class="text-cyber-gray m-0 text-xl italic">
                   Character profiles coming soon...
                 </p>
@@ -83,7 +83,7 @@ import { protagonists, antagonists } from "../data/characters";
       </section>
 
       <section class="my-16">
-        <h2 class="border-cyber-purple mb-8 border-b pb-4 text-3xl">
+        <h2 class="border-cyber-pink mb-8 border-b pb-4 text-3xl">
           Antagonists
         </h2>
         <div
@@ -128,7 +128,7 @@ import { protagonists, antagonists } from "../data/characters";
           }
           {
             antagonists.length === 0 && (
-              <div class="border-cyber-purple col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
+              <div class="border-cyber-pink col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
                 <p class="text-cyber-gray m-0 text-xl italic">
                   Character profiles coming soon...
                 </p>
@@ -153,7 +153,7 @@ import { protagonists, antagonists } from "../data/characters";
     background: linear-gradient(
       45deg,
       transparent 30%,
-      rgba(177, 255, 236, 0.1) 50%,
+      rgba(0, 229, 195, 0.1) 50%,
       transparent 70%
     );
     animation: shine-character 3s infinite;
@@ -170,9 +170,9 @@ import { protagonists, antagonists } from "../data/characters";
 
   .character-question {
     text-shadow:
-      0 0 10px rgba(177, 255, 236, 0.8),
-      0 0 20px rgba(177, 255, 236, 0.6),
-      0 0 30px rgba(177, 255, 236, 0.4);
+      0 0 10px rgba(0, 229, 195, 0.8),
+      0 0 20px rgba(0, 229, 195, 0.6),
+      0 0 30px rgba(0, 229, 195, 0.4);
   }
 
   .antagonist-question {
@@ -183,8 +183,8 @@ import { protagonists, antagonists } from "../data/characters";
   }
 
   a:hover .character-img {
-    border-color: #b1ffec !important;
-    box-shadow: 0 0 15px rgba(177, 255, 236, 0.4) !important;
+    border-color: #00e5c3 !important;
+    box-shadow: 0 0 15px rgba(0, 229, 195, 0.4) !important;
   }
 
   .antagonist-card:hover .antagonist-img {
