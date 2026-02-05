@@ -8,7 +8,7 @@ import Header from "../../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
 
 const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
@@ -19,53 +19,83 @@ const posts = (await getCollection("blog")).sort(
   </head>
   <body>
     <Header />
-    <main class="max-w-site w-full">
-      <section class="border-cyber-pink mb-12 border-b-2 py-12 text-center">
-        <h1 class="mb-4 text-6xl">Monthly Devlog</h1>
-        <p class="text-cyber-gray m-0 text-xl">
-          Development updates and behind-the-scenes insights
-        </p>
+    <main class="blog-main">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-bg">
+          <div class="hero-grid"></div>
+          <div class="glow glow-pink"></div>
+          <div class="glow glow-cyan"></div>
+          <div class="scanlines"></div>
+        </div>
+
+        <div class="hero-inner">
+          <div class="hero-top-bar">
+            <span class="bar-label">EIDOLWARE //</span>
+            <span class="bar-jp">開発日記</span>
+          </div>
+
+          <h1 class="hero-title">Devlog</h1>
+          <div class="tagline">
+            <div class="tag-line"></div>
+            <span class="tag-text">Development Updates & Behind the Scenes</span>
+            <div class="tag-line"></div>
+          </div>
+        </div>
+
+        <div class="hero-stripe">
+          <div class="stripe-pink"></div>
+          <div class="stripe-cyan"></div>
+        </div>
       </section>
 
-      <section>
-        <ul class="m-0 flex list-none flex-wrap gap-8 p-0">
+      <!-- Posts Section -->
+      <section class="content-section">
+        <div class="section-head">
+          <div class="num-block num-pink">
+            <span class="num">01</span>
+          </div>
+          <div class="head-text">
+            <span class="head-jp">すべての投稿</span>
+            <h2 class="head-title">All Posts</h2>
+          </div>
+          <div class="head-rule"></div>
+          <span class="post-count">{posts.length} entries</span>
+        </div>
+
+        <div class="posts-grid">
           {
             posts.map((post, index) => (
-              <li
-                class={
-                  index === 0 ? "mb-4 w-full text-center" : "w-[calc(50%-1rem)]"
-                }
+              <a
+                href={`/blog/${post.id}/`}
+                class:list={["post-card", { featured: index === 0 }]}
               >
-                <a
-                  href={`/blog/${post.id}/`}
-                  class="block no-underline transition-all duration-200"
-                >
-                  {post.data.heroImage && (
+                {post.data.heroImage && (
+                  <div class="post-image">
                     <Image
-                      width={720}
-                      height={360}
+                      width={index === 0 ? 1200 : 600}
+                      height={index === 0 ? 600 : 300}
                       src={post.data.heroImage}
                       alt=""
-                      class="mb-2"
+                      class="post-img"
                     />
-                  )}
-                  <h4
-                    class={
-                      index === 0
-                        ? "title-first text-cyber-cyan m-0 leading-none"
-                        : "title text-cyber-cyan m-0 leading-none"
-                    }
-                  >
-                    {post.data.title}
-                  </h4>
-                  <p class="date text-cyber-gray m-0">
+                    <div class="post-overlay" />
+                  </div>
+                )}
+                <div class="post-info">
+                  <span class="post-date">
                     <FormattedDate date={post.data.pubDate} />
-                  </p>
-                </a>
-              </li>
+                  </span>
+                  <h3 class="post-title">{post.data.title}</h3>
+                  {post.data.description && (
+                    <p class="post-desc">{post.data.description}</p>
+                  )}
+                  <span class="post-link">Read More →</span>
+                </div>
+              </a>
             ))
           }
-        </ul>
+        </div>
       </section>
     </main>
     <Footer />
@@ -73,54 +103,404 @@ const posts = (await getCollection("blog")).sort(
 </html>
 
 <style>
-  .title {
-    font-size: 1.563rem;
+  .blog-main {
+    padding: 0;
+    max-width: 100%;
   }
 
-  .title-first {
-    font-size: 2.369rem;
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .title-first + .date {
-    font-size: inherit;
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
   }
 
-  a:hover h4,
-  a:hover .date {
-    color: #00e5c3 !important;
-    text-shadow:
-      0 0 10px rgba(0, 229, 195, 0.8),
-      0 0 20px rgba(0, 229, 195, 0.6),
-      0 0 30px rgba(0, 229, 195, 0.4);
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232, 21, 122, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232, 21, 122, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(
+      ellipse 80% 70% at 50% 40%,
+      black 20%,
+      transparent 70%
+    );
   }
 
-  a:hover img {
-    box-shadow:
-      0 2px 6px rgba(232, 21, 122, 0.3),
-      0 8px 24px rgba(0, 229, 195, 0.2),
-      0 0 40px rgba(232, 21, 122, 0.4);
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.12;
   }
 
-  li:first-child img {
+  .glow-pink {
+    width: 600px;
+    height: 600px;
+    background: #e8157a;
+    top: -30%;
+    left: 10%;
+  }
+
+  .glow-cyan {
+    width: 450px;
+    height: 450px;
+    background: #00e5c3;
+    bottom: -20%;
+    right: 5%;
+  }
+
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.008) 2px,
+      rgba(255, 255, 255, 0.008) 4px
+    );
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .hero-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #1a1a28;
+    width: fit-content;
+  }
+
+  .bar-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e8157a;
+  }
+
+  .bar-jp {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #00e5c3;
+    letter-spacing: 0.15em;
+  }
+
+  .hero-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 1rem;
+    text-shadow: none;
+    line-height: 1;
+  }
+
+  .tagline {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    justify-content: center;
+  }
+
+  .tag-line {
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, #e8157a);
+  }
+
+  .tag-line:last-child {
+    background: linear-gradient(90deg, #00e5c3, transparent);
+  }
+
+  .tag-text {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #9090a0;
+  }
+
+  .hero-stripe {
+    display: flex;
+    height: 3px;
+  }
+
+  .stripe-pink {
+    flex: 1;
+    background: #e8157a;
+  }
+
+  .stripe-cyan {
+    flex: 1;
+    background: #00e5c3;
+  }
+
+  /* Content Section */
+  .content-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .num-block {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;
+    flex-shrink: 0;
+  }
+
+  .num-pink {
+    border-color: #e8157a;
+  }
+
+  .num {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .head-jp {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #00e5c3;
+    letter-spacing: 0.2em;
+  }
+
+  .head-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.08em;
+    color: #fff;
+    margin: 0;
+    text-shadow: none;
+    text-transform: uppercase;
+  }
+
+  .head-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #1a1a28, transparent);
+  }
+
+  .post-count {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: #9a9aa2;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  /* Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #e8157a;
+    background: rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .post-card:hover {
+    border-color: #00e5c3;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 229, 195, 0.2);
+  }
+
+  .post-card.featured {
+    grid-column: 1 / -1;
+  }
+
+  .post-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .post-img {
     width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
   }
 
+  .post-card:hover .post-img {
+    transform: scale(1.05);
+  }
+
+  .post-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(10, 10, 20, 0.8)
+    );
+    pointer-events: none;
+  }
+
+  .post-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .post-date {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: #9a9aa2;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .post-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.5rem;
+    color: #00e5c3;
+    margin: 0;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+  }
+
+  .post-card:hover .post-title {
+    text-shadow: 0 0 10px rgba(0, 229, 195, 0.6);
+  }
+
+  .featured .post-title {
+    font-size: 2rem;
+  }
+
+  .post-desc {
+    font-size: 0.95rem;
+    color: #c8c8d0;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .post-link {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    color: #e8157a;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .post-card:hover .post-link {
+    color: #00e5c3;
+  }
+
+  /* Responsive */
   @media (max-width: 720px) {
-    ul {
-      gap: 0.5em !important;
+    .hero-title {
+      font-size: 3rem;
     }
 
-    li {
-      width: 100% !important;
-      text-align: center !important;
+    .hero-top-bar {
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    li:first-child {
-      margin-bottom: 0 !important;
+    .tagline {
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
-    .title-first {
-      font-size: 1.563em !important;
+    .tag-line {
+      display: none;
+    }
+
+    .content-section {
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .section-head {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .num-block {
+      width: 40px;
+      height: 40px;
+    }
+
+    .num {
+      font-size: 1.2rem;
+    }
+
+    .head-title {
+      font-size: 1.4rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .post-card.featured {
+      grid-column: 1;
+    }
+
+    .featured .post-title {
+      font-size: 1.5rem;
+    }
+
+    .post-info {
+      padding: 1.25rem;
     }
   }
 </style>

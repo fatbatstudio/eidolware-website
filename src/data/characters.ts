@@ -10,6 +10,16 @@ export interface Character {
   background?: string;
 }
 
+export const characterImageMap: Record<string, string> = {
+  "anna-lam": "anna",
+  "susie-swanson": "susie",
+  "fedora-mask": "fedora-mask",
+  "bea-beatrix": "bea",
+  "j-woo": "j-woo",
+  "may-melody": "may-melody",
+  "jared-jimenez": "jared",
+};
+
 export const characters: Character[] = [
   // Protagonists
   {

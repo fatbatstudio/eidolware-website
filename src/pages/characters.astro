@@ -1,9 +1,30 @@
 ---
+import { Image } from "astro:assets";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { SITE_TITLE } from "../consts";
 import { protagonists, antagonists } from "../data/characters";
+
+import annaImg from "../assets/characters/anna.png";
+import susieImg from "../assets/characters/susie.png";
+import fedoraMaskImg from "../assets/characters/fedora-mask.png";
+import beaImg from "../assets/characters/bea.png";
+import jWooImg from "../assets/characters/j-woo.png";
+import mayMelodyImg from "../assets/characters/may-melody.png";
+import jaredImg from "../assets/characters/jared.png";
+
+const charImages: Record<string, ImageMetadata> = {
+  "anna-lam": annaImg,
+  "susie-swanson": susieImg,
+  "fedora-mask": fedoraMaskImg,
+  "bea-beatrix": beaImg,
+  "j-woo": jWooImg,
+  "may-melody": mayMelodyImg,
+  "jared-jimenez": jaredImg,
+};
+
+const allCharacters = [...protagonists, ...antagonists];
 ---
 
 <!doctype html>
@@ -16,124 +37,167 @@ import { protagonists, antagonists } from "../data/characters";
   </head>
   <body>
     <Header />
-    <main>
-      <section class="border-cyber-pink mb-12 border-b-2 py-12 text-center">
-        <h1 class="mb-4 text-6xl">Characters</h1>
-        <p class="text-cyber-gray m-0 text-xl">
-          The characters in this twisted convention
-        </p>
+    <main class="char-main">
+      <!-- Hero -->
+      <section class="char-hero">
+        <div class="char-hero-bg">
+          <div class="char-grid"></div>
+          <div class="glow glow-pink"></div>
+          <div class="glow glow-cyan"></div>
+          <div class="scanlines"></div>
+        </div>
+
+        <div class="char-hero-inner">
+          <div class="char-hero-bar">
+            <span class="bar-label">EIDOLWARE //</span>
+            <span class="bar-jp">登場人物</span>
+            <span class="bar-count">
+              <span class="count-num">{allCharacters.length}</span>
+              PROFILES
+            </span>
+          </div>
+
+          <h1 class="char-hero-title">Characters</h1>
+          <div class="char-tagline">
+            <div class="tag-line"></div>
+            <span class="tag-text">The Cast of FedoraCon</span>
+            <div class="tag-line"></div>
+          </div>
+        </div>
+
+        <div class="char-hero-stripe">
+          <div class="stripe-pink"></div>
+          <div class="stripe-cyan"></div>
+        </div>
       </section>
 
-      <section class="my-16">
-        <h2 class="border-cyber-pink mb-8 border-b pb-4 text-3xl">
-          Protagonists
-        </h2>
-        <div
-          class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-10"
-        >
+      <!-- Protagonists -->
+      <section class="char-section">
+        <div class="section-head">
+          <div class="num-block num-pink">
+            <span class="num">01</span>
+          </div>
+          <div class="head-text">
+            <span class="head-jp">主人公</span>
+            <h2 class="head-title">Protagonists</h2>
+          </div>
+          <div class="head-rule"></div>
+        </div>
+
+        <div class="char-roster">
           {
-            protagonists.map((character) => (
+            protagonists.map((character, i) => (
               <a
                 href={`/characters/${character.slug}`}
-                class="border-cyber-pink hover:border-cyber-cyan block cursor-pointer rounded-lg border bg-black/50 p-6 text-inherit no-underline transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(0,229,195,0.2)]"
+                class="char-card"
+                style={`--delay: ${i * 0.1}s`}
               >
-                <div class="mb-6 aspect-square w-full overflow-hidden rounded-lg">
-                  {character.image ? (
-                    <img
-                      src={character.image}
-                      alt={character.name}
-                      class="border-cyber-pink character-img h-full w-full rounded-lg border-2 object-cover transition-all duration-300"
-                    />
-                  ) : (
-                    <div class="character-placeholder from-[#c0116a] to-[#e8157a] border-cyber-pink relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg border-2 bg-gradient-to-br">
-                      <span class="font-display text-cyber-cyan character-question z-10 text-7xl">
-                        ?
+                <div class="card-stripe-top">
+                  <div class="stripe-pink" />
+                  <div class="stripe-cyan" />
+                </div>
+
+                <div class="card-inner">
+                  <div class="card-portrait">
+                    <div class="portrait-frame portrait-frame-pro">
+                      {charImages[character.slug] ? (
+                        <Image
+                          src={charImages[character.slug]}
+                          alt={character.name}
+                          width={400}
+                          height={533}
+                          class="portrait-img"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span class="portrait-glyph portrait-glyph-pro">?</span>
+                      )}
+                    </div>
+                    <div class="portrait-index">
+                      <span class="idx-letter idx-letter-pro">
+                        {String.fromCharCode(65 + i)}
                       </span>
                     </div>
-                  )}
-                </div>
-                <div>
-                  <h3 class="text-cyber-cyan mb-2 text-2xl">
-                    {character.name}
-                  </h3>
-                  <p class="text-cyber-cyan mb-4 text-sm font-semibold tracking-widest uppercase">
-                    {character.role}
-                  </p>
-                  <div class="text-cyber-gray-dark leading-relaxed">
-                    {character.description
-                      .split("\n\n")
-                      .map((paragraph: string) => (
-                        <p class="mb-4 last:mb-0">{paragraph}</p>
-                      ))}
+                  </div>
+
+                  <div class="card-info">
+                    <div class="card-name-row">
+                      <h3 class="card-name card-name-pro">{character.name}</h3>
+                      <div class="card-name-rule" />
+                    </div>
+                    <p class="card-role card-role-pro">{character.role}</p>
+                    <p class="card-desc">{character.description}</p>
+                    <span class="card-link card-link-pro">View Profile →</span>
                   </div>
                 </div>
               </a>
             ))
-          }
-          {
-            protagonists.length === 0 && (
-              <div class="border-cyber-pink col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
-                <p class="text-cyber-gray m-0 text-xl italic">
-                  Character profiles coming soon...
-                </p>
-              </div>
-            )
           }
         </div>
       </section>
 
-      <section class="my-16">
-        <h2 class="border-cyber-pink mb-8 border-b pb-4 text-3xl">
-          Antagonists
-        </h2>
-        <div
-          class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-10"
-        >
+      <!-- Divider -->
+      <div class="section-divider">
+        <div class="stripe-pink"></div>
+        <div class="stripe-cyan"></div>
+      </div>
+
+      <!-- Antagonists -->
+      <section class="char-section">
+        <div class="section-head">
+          <div class="num-block num-red">
+            <span class="num">02</span>
+          </div>
+          <div class="head-text">
+            <span class="head-jp head-jp-red">敵役</span>
+            <h2 class="head-title">Antagonists</h2>
+          </div>
+          <div class="head-rule head-rule-red"></div>
+        </div>
+
+        <div class="char-grid-antag">
           {
-            antagonists.map((character) => (
+            antagonists.map((character, i) => (
               <a
                 href={`/characters/${character.slug}`}
-                class="antagonist-card block cursor-pointer rounded-lg border border-[#8b0000] bg-black/50 p-6 text-inherit no-underline transition-all duration-300 hover:-translate-y-1 hover:border-[#ff4444] hover:shadow-[0_0_20px_rgba(255,68,68,0.3)]"
+                class="char-card-antag"
+                style={`--delay: ${i * 0.08}s`}
               >
-                <div class="mb-6 aspect-square w-full overflow-hidden rounded-lg">
-                  {character.image ? (
-                    <img
-                      src={character.image}
-                      alt={character.name}
-                      class="antagonist-img h-full w-full rounded-lg border-2 border-[#8b0000] object-cover transition-all duration-300"
-                    />
-                  ) : (
-                    <div class="antagonist-placeholder relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg border-2 border-[#8b0000] bg-gradient-to-br from-[#8b0000] to-[#4d0000]">
-                      <span class="font-display antagonist-question z-10 text-7xl text-[#ff4444]">
-                        ?
-                      </span>
+                <div class="card-edge-antag" />
+
+                <div class="antag-inner">
+                  <div class="antag-portrait">
+                    <div class="portrait-frame portrait-frame-antag">
+                      {charImages[character.slug] ? (
+                        <Image
+                          src={charImages[character.slug]}
+                          alt={character.name}
+                          width={280}
+                          height={373}
+                          class="portrait-img"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span class="portrait-glyph portrait-glyph-antag">?</span>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div>
-                  <h3 class="mb-2 text-2xl text-[#ff4444]">{character.name}</h3>
-                  <p class="mb-4 text-sm font-semibold tracking-widest text-[#ff8888] uppercase">
-                    {character.role}
-                  </p>
-                  <div class="text-cyber-gray-dark leading-relaxed">
-                    {character.description
-                      .split("\n\n")
-                      .map((paragraph: string) => (
-                        <p class="mb-4 last:mb-0">{paragraph}</p>
-                      ))}
+                  </div>
+
+                  <div class="antag-info">
+                    <div class="antag-idx">
+                      <span class="idx-letter idx-letter-antag">
+                        {String.fromCharCode(65 + i)}
+                      </span>
+                      <div class="idx-line idx-line-antag" />
+                    </div>
+                    <h3 class="card-name card-name-antag">{character.name}</h3>
+                    <p class="card-role card-role-antag">{character.role}</p>
+                    <p class="card-desc">{character.description}</p>
+                    <span class="card-link card-link-antag">View Profile →</span>
                   </div>
                 </div>
               </a>
             ))
-          }
-          {
-            antagonists.length === 0 && (
-              <div class="border-cyber-pink col-span-full rounded-lg border border-dashed bg-black/30 p-12 text-center">
-                <p class="text-cyber-gray m-0 text-xl italic">
-                  Character profiles coming soon...
-                </p>
-              </div>
-            )
           }
         </div>
       </section>
@@ -143,8 +207,370 @@ import { protagonists, antagonists } from "../data/characters";
 </html>
 
 <style>
-  .character-placeholder::before {
-    content: "";
+  /* ═══ MAIN ═══ */
+  .char-main {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* ═══ HERO ═══ */
+  .char-hero {
+    position: relative;
+    width: 100%;
+    padding: 3rem 3rem 0;
+    overflow: hidden;
+  }
+
+  .char-hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .char-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232, 21, 122, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232, 21, 122, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 70%);
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.12;
+  }
+
+  .glow-pink {
+    width: 500px;
+    height: 500px;
+    background: #e8157a;
+    top: -30%;
+    left: 15%;
+  }
+
+  .glow-cyan {
+    width: 400px;
+    height: 400px;
+    background: #00e5c3;
+    bottom: -20%;
+    right: 10%;
+  }
+
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.008) 2px,
+      rgba(255, 255, 255, 0.008) 4px
+    );
+    pointer-events: none;
+  }
+
+  .char-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 3rem;
+  }
+
+  .char-hero-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #1a1a28;
+    width: fit-content;
+  }
+
+  .bar-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e8157a;
+  }
+
+  .bar-jp {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #00e5c3;
+    letter-spacing: 0.15em;
+  }
+
+  .bar-count {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8585a0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .count-num {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.1rem;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .char-hero-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 1rem;
+    text-shadow: none;
+    line-height: 1;
+  }
+
+  .char-tagline {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    justify-content: center;
+  }
+
+  .tag-line {
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, #e8157a);
+  }
+
+  .tag-line:last-child {
+    background: linear-gradient(90deg, #00e5c3, transparent);
+  }
+
+  .tag-text {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #9090a0;
+  }
+
+  .char-hero-stripe {
+    display: flex;
+    height: 3px;
+    margin-left: -3rem;
+    margin-right: -3rem;
+  }
+
+  .stripe-pink {
+    flex: 1;
+    background: #e8157a;
+  }
+
+  .stripe-cyan {
+    flex: 1;
+    background: #00e5c3;
+  }
+
+  /* ═══ SECTIONS ═══ */
+  .char-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .num-block {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;
+    flex-shrink: 0;
+  }
+
+  .num-pink {
+    border-color: #e8157a;
+  }
+
+  .num-red {
+    border-color: #ff4444;
+  }
+
+  .num {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.8rem;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .head-jp {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #00e5c3;
+    letter-spacing: 0.2em;
+  }
+
+  .head-jp-red {
+    color: #ff4444;
+  }
+
+  .head-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.08em;
+    color: #fff;
+    margin: 0;
+    text-shadow: none;
+    text-transform: uppercase;
+  }
+
+  .head-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #1a1a28, transparent);
+  }
+
+  .head-rule-red {
+    background: linear-gradient(90deg, #2a1010, transparent);
+  }
+
+  /* ═══ DIVIDER ═══ */
+  .section-divider {
+    display: flex;
+    height: 3px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ═══ PROTAGONIST CARDS ═══ */
+  .char-roster {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #1a1a28;
+  }
+
+  .char-card {
+    display: block;
+    background: #0a0a14;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .char-card:hover {
+    background: #0e0e1a;
+    color: inherit;
+    text-shadow: none;
+  }
+
+  .card-stripe-top {
+    display: flex;
+    height: 2px;
+  }
+
+  .card-stripe-top:first-child {
+    display: flex;
+  }
+
+  .char-card:first-child .card-stripe-top {
+    display: none;
+  }
+
+  .card-inner {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2.5rem;
+    padding: 2.5rem 3rem;
+    align-items: start;
+  }
+
+  /* Portrait */
+  .card-portrait {
+    position: relative;
+  }
+
+  .portrait-frame {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid;
+  }
+
+  .portrait-frame-pro {
+    border-color: #e8157a;
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0a12 100%);
+  }
+
+  .portrait-frame-antag {
+    border-color: #ff4444;
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0a0a 100%);
+  }
+
+  .portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .char-card:hover .portrait-img,
+  .char-card-antag:hover .portrait-img {
+    transform: scale(1.05);
+  }
+
+  .portrait-glyph {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    z-index: 2;
+  }
+
+  .portrait-glyph-pro {
+    color: #e8157a;
+    text-shadow: 0 0 20px rgba(232, 21, 122, 0.4);
+  }
+
+  .portrait-glyph-antag {
+    color: #ff4444;
+    text-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+  }
+
+  .portrait-shine {
     position: absolute;
     top: -50%;
     left: -50%;
@@ -153,13 +579,22 @@ import { protagonists, antagonists } from "../data/characters";
     background: linear-gradient(
       45deg,
       transparent 30%,
-      rgba(0, 229, 195, 0.1) 50%,
+      rgba(232, 21, 122, 0.08) 50%,
       transparent 70%
     );
-    animation: shine-character 3s infinite;
+    animation: shine-sweep 4s infinite;
   }
 
-  @keyframes shine-character {
+  .portrait-shine-antag {
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 68, 68, 0.08) 50%,
+      transparent 70%
+    );
+  }
+
+  @keyframes shine-sweep {
     0% {
       transform: translateX(-100%) translateY(-100%) rotate(45deg);
     }
@@ -168,41 +603,305 @@ import { protagonists, antagonists } from "../data/characters";
     }
   }
 
-  .character-question {
-    text-shadow:
-      0 0 10px rgba(0, 229, 195, 0.8),
-      0 0 20px rgba(0, 229, 195, 0.6),
-      0 0 30px rgba(0, 229, 195, 0.4);
+  .portrait-index {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    z-index: 3;
   }
 
-  .antagonist-question {
-    text-shadow:
-      0 0 10px rgba(255, 68, 68, 0.8),
-      0 0 20px rgba(255, 68, 68, 0.6),
-      0 0 30px rgba(255, 68, 68, 0.4);
+  .idx-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.3rem;
+    line-height: 1;
   }
 
-  a:hover .character-img {
-    border-color: #00e5c3 !important;
-    box-shadow: 0 0 15px rgba(0, 229, 195, 0.4) !important;
+  .idx-letter-pro {
+    background: #e8157a;
+    color: #fff;
   }
 
-  .antagonist-card:hover .antagonist-img {
-    border-color: #ff4444 !important;
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4) !important;
+  .idx-letter-antag {
+    background: #ff4444;
+    color: #fff;
+    border: 1px solid #ff4444;
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Card info */
+  .card-info {
+    padding-top: 0.25rem;
+  }
+
+  .card-name-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-name {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: none;
+    white-space: nowrap;
+  }
+
+  .card-name-pro {
+    color: #fff;
+  }
+
+  .card-name-antag {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-name-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #1a1a28, transparent);
+  }
+
+  .card-role {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 1.25rem;
+  }
+
+  .card-role-pro {
+    color: #00e5c3;
+  }
+
+  .card-role-antag {
+    color: #ff8888;
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-desc {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #9a9aa2;
+    margin: 0 0 1.5rem;
+  }
+
+  .card-link {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    padding: 0.4rem 1rem;
+    border: 1px solid;
+    display: inline-block;
+  }
+
+  .card-link-pro {
+    color: #e8157a;
+    border-color: #e8157a;
+  }
+
+  .card-link-antag {
+    color: #ff4444;
+    border-color: #ff4444;
+  }
+
+  .char-card:hover .card-link-pro {
+    background: #e8157a;
+    color: #fff;
+  }
+
+  .char-card:hover .card-name-pro {
+    color: #00e5c3;
+  }
+
+  .char-card:hover .portrait-frame-pro {
+    border-color: #00e5c3;
+    box-shadow: 0 0 20px rgba(0, 229, 195, 0.2);
+  }
+
+  .char-card:hover .portrait-glyph-pro {
+    color: #00e5c3;
+    text-shadow: 0 0 20px rgba(0, 229, 195, 0.5);
+  }
+
+  .char-card:hover .idx-letter-pro {
+    background: #00e5c3;
+  }
+
+  /* ═══ ANTAGONIST CARDS ═══ */
+  .char-grid-antag {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: #1a1a28;
+  }
+
+  .char-card-antag {
+    display: block;
+    background: #0a0a14;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .char-card-antag:hover {
+    background: #0e0e1a;
+    color: inherit;
+    text-shadow: none;
+  }
+
+  /* If odd number of antagonists, last card spans full width */
+  .char-card-antag:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .card-edge-antag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #ff4444;
+  }
+
+  .antag-inner {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 2rem;
+    padding: 2.5rem;
+    align-items: start;
+  }
+
+  .antag-portrait {
+    position: relative;
+  }
+
+  .antag-info {
+    padding-top: 0.25rem;
+  }
+
+  .antag-idx {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .idx-line {
+    flex: 1;
+    height: 1px;
+  }
+
+  .idx-line-antag {
+    background: #2a1010;
+  }
+
+  .char-card-antag:hover .card-link-antag {
+    background: #ff4444;
+    color: #fff;
+  }
+
+  .char-card-antag:hover .card-name-antag {
+    color: #ff4444;
+  }
+
+  .char-card-antag:hover .portrait-frame-antag {
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+  }
+
+  .char-card-antag:hover .portrait-glyph-antag {
+    text-shadow: 0 0 25px rgba(255, 68, 68, 0.6);
+  }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 1024px) {
+    .char-grid-antag {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 720px) {
-    .text-6xl {
-      font-size: 2.5rem !important;
+    .char-hero {
+      padding: 2rem 1.25rem 0;
     }
 
-    .grid {
-      grid-template-columns: 1fr !important;
+    .char-hero-stripe {
+      margin-left: -1.25rem;
+      margin-right: -1.25rem;
     }
 
-    .text-7xl {
-      font-size: 3rem !important;
+    .char-hero-title {
+      font-size: 3rem;
+    }
+
+    .char-hero-bar {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .char-section {
+      padding: 2.5rem 1.25rem;
+    }
+
+    .card-inner {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .card-portrait {
+      max-width: 160px;
+    }
+
+    .antag-inner {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .antag-portrait {
+      max-width: 120px;
+    }
+
+    .section-head {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .num-block {
+      width: 45px;
+      height: 45px;
+    }
+
+    .num {
+      font-size: 1.4rem;
+    }
+
+    .head-title {
+      font-size: 1.6rem;
+    }
+
+    .char-tagline {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tag-line {
+      display: none;
     }
   }
 </style>

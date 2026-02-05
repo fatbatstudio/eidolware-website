@@ -6,9 +6,9 @@ import Header from "../components/Header.astro";
 import BlueskyFeed from "../components/BlueskyFeed.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import { getCollection } from "astro:content";
-import eidolwareLogo from "../assets/eidolware_logo.png";
-import annaSide from "../assets/anna-side.png";
-import susieSide from "../assets/susie-side.png";
+import eidolwareLogo from "../assets/logos/eidolware_logo.png";
+import annaSide from "../assets/characters/anna-side.png";
+import susieSide from "../assets/characters/susie-side.png";
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -269,8 +269,7 @@ const posts = (await getCollection("blog"))
   /* ═══ HERO ═══ */
   .hero {
     position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
     padding: 3rem 3rem 0;
     overflow: hidden;
   }
@@ -512,6 +511,8 @@ const posts = (await getCollection("blog"))
   .hero-stripe {
     display: flex;
     height: 3px;
+    margin-left: -3rem;
+    margin-right: -3rem;
   }
 
   .stripe-pink {
@@ -865,6 +866,10 @@ const posts = (await getCollection("blog"))
   @media (max-width: 720px) {
     .hero {
       padding: 2rem 1.25rem 0;
+    }
+    .hero-stripe {
+      margin-left: -1.25rem;
+      margin-right: -1.25rem;
     }
     .story,
     .features,
