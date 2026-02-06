@@ -238,6 +238,17 @@ const posts = (await getCollection("blog"))
                       class="card-top-stripe"
                       style={`background: ${i % 2 === 0 ? "#e8157a" : "#00e5c3"}`}
                     />
+                    {post.data.heroImage && (
+                      <div class="devlog-thumb">
+                        <Image
+                          src={post.data.heroImage}
+                          alt=""
+                          width={600}
+                          class="devlog-thumb-img"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
                     <time>
                       {post.data.pubDate.toLocaleDateString("en-US", {
                         year: "numeric",
@@ -817,6 +828,22 @@ const posts = (await getCollection("blog"))
     width: 100%;
     height: 2px;
     margin-bottom: 1.25rem;
+  }
+
+  .devlog-thumb {
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+
+  .devlog-thumb-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .devlog-card:hover .devlog-thumb-img {
+    transform: scale(1.03);
   }
 
   .devlog-card time {
