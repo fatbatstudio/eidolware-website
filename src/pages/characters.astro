@@ -113,18 +113,16 @@ const allCharacters = [...protagonists, ...antagonists];
                         <span class="portrait-glyph portrait-glyph-pro">?</span>
                       )}
                     </div>
-                    <div class="portrait-index">
-                      <span class="idx-letter idx-letter-pro">
-                        {String.fromCharCode(65 + i)}
-                      </span>
-                    </div>
                   </div>
 
                   <div class="card-info">
-                    <div class="card-name-row">
-                      <h3 class="card-name card-name-pro">{character.name}</h3>
-                      <div class="card-name-rule" />
+                    <div class="pro-idx">
+                      <span class="idx-letter idx-letter-pro">
+                        {String.fromCharCode(65 + i)}
+                      </span>
+                      <div class="idx-line idx-line-pro" />
                     </div>
+                    <h3 class="card-name card-name-pro">{character.name}</h3>
                     <p class="card-role card-role-pro">{character.role}</p>
                     <p class="card-desc">{character.description}</p>
                     <span class="card-link card-link-pro">View Profile →</span>
@@ -603,13 +601,6 @@ const allCharacters = [...protagonists, ...antagonists];
     }
   }
 
-  .portrait-index {
-    position: absolute;
-    bottom: -1px;
-    right: -1px;
-    z-index: 3;
-  }
-
   .idx-letter {
     display: flex;
     align-items: center;
@@ -624,6 +615,9 @@ const allCharacters = [...protagonists, ...antagonists];
   .idx-letter-pro {
     background: #e8157a;
     color: #fff;
+    border: 1px solid #e8157a;
+    width: 34px;
+    height: 34px;
   }
 
   .idx-letter-antag {
@@ -634,16 +628,30 @@ const allCharacters = [...protagonists, ...antagonists];
     height: 34px;
   }
 
+  .pro-idx,
+  .antag-idx {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .idx-line {
+    flex: 1;
+    height: 1px;
+  }
+
+  .idx-line-pro {
+    background: #1a1a28;
+  }
+
+  .idx-line-antag {
+    background: #2a1010;
+  }
+
   /* Card info */
   .card-info {
     padding-top: 0.25rem;
-  }
-
-  .card-name-row {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 0.5rem;
   }
 
   .card-name {
@@ -658,17 +666,12 @@ const allCharacters = [...protagonists, ...antagonists];
 
   .card-name-pro {
     color: #fff;
+    margin-bottom: 0.5rem;
   }
 
   .card-name-antag {
     color: #fff;
     margin-bottom: 0.5rem;
-  }
-
-  .card-name-rule {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, #1a1a28, transparent);
   }
 
   .card-role {
@@ -739,6 +742,7 @@ const allCharacters = [...protagonists, ...antagonists];
 
   .char-card:hover .idx-letter-pro {
     background: #00e5c3;
+    border-color: #00e5c3;
   }
 
   /* ═══ ANTAGONIST CARDS ═══ */
@@ -792,22 +796,6 @@ const allCharacters = [...protagonists, ...antagonists];
 
   .antag-info {
     padding-top: 0.25rem;
-  }
-
-  .antag-idx {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .idx-line {
-    flex: 1;
-    height: 1px;
-  }
-
-  .idx-line-antag {
-    background: #2a1010;
   }
 
   .char-card-antag:hover .card-link-antag {
