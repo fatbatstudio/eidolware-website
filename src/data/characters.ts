@@ -48,10 +48,10 @@ export const characters: Character[] = [
     slug: "fedora-mask",
     role: "Founder of FedoraCon, Crypto-Billionaire, Paladin Level 20, Dungeon Master",
     description:
-      "Crypto-billionaire founder of FedoraCon. With his patented Hard Light technology and seemingly limitless resources, Fedora Mask is on a mission to make anime a reality and change fandom forever.",
+      "Crypto-billionaire founder of FedoraCon. With his patented Hard-Holo technology and seemingly limitless resources, Fedora Mask is on a mission to make anime a reality and change fandom forever.",
     image: null,
     type: "antagonist",
-    bio: "Fedora Mask, a crypto-billionaire, decided to spend his wealth creating the first permanent 24-hour underground anime convention to bring his dreams to reality. Powered by his patented Hard Light holographic technology, he envisions a world where anyone can make their fantasies come true.\n\nWith seemingly limitless resources and powerful allies at his side, Fedora Mask strives to make anime a reality. Theatrical and grandiose in everything he does, he works tirelessly on his newest project that promises to change fandom forever.",
+    bio: "Fedora Mask, a crypto-billionaire, decided to spend his wealth creating the first permanent 24-hour underground anime convention to bring his dreams to reality. Powered by his patented Hard-Holo technology, he envisions a world where anyone can make their fantasies come true.\n\nWith seemingly limitless resources and powerful allies at his side, Fedora Mask strives to make anime a reality. Theatrical and grandiose in everything he does, he works tirelessly on his newest project that promises to change fandom forever.",
   },
   {
     name: "Bea Beatrix",
