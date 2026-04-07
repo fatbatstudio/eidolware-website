@@ -10,37 +10,6 @@ import morganaAndAnna from "../assets/gallery/art/morgana-and-anna.png";
 import beaImg from "../assets/characters/bea.png";
 import jWooImg from "../assets/characters/j-woo.png";
 
-// Fetch 3 most recent videos from the YouTube playlist at build time
-interface YouTubeVideo {
-  id: string;
-  title: string;
-}
-
-let youtubeVideos: YouTubeVideo[] = [];
-try {
-  const res = await fetch(
-    "https://www.youtube.com/playlist?list=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH"
-  );
-  const html = await res.text();
-  const match = html.match(/var ytInitialData = ({.*?});<\/script>/s);
-  if (match) {
-    const data = JSON.parse(match[1]);
-    const contents =
-      data.contents?.twoColumnBrowseResultsRenderer?.tabs?.[0]?.tabRenderer
-        ?.content?.sectionListRenderer?.contents?.[0]?.itemSectionRenderer
-        ?.contents?.[0]?.playlistVideoListRenderer?.contents ?? [];
-    youtubeVideos = contents
-      .filter((c: any) => c.playlistVideoRenderer)
-      .map((c: any) => ({
-        id: c.playlistVideoRenderer.videoId as string,
-        title: (c.playlistVideoRenderer.title?.runs?.[0]?.text ?? "") as string,
-      }))
-      .slice(0, 3);
-  }
-} catch (e) {
-  // Fall back to empty if fetch fails at build time
-}
-
 // Artwork images
 interface ArtworkImage {
   image: ImageMetadata;
@@ -109,44 +78,21 @@ const artworkImages: ArtworkImage[] = [
         </div>
 
         <div class="section-body">
-          {
-            youtubeVideos.length > 0 ? (
-              <>
-                <div class="media-grid">
-                  {youtubeVideos.map((video) => (
-                    <div class="media-card video-card">
-                      <div class="video-wrapper">
-                        <iframe
-                          src={`https://www.youtube-nocookie.com/embed/${video.id}?vq=hd1080`}
-                          title={video.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowfullscreen
-                          loading="lazy"
-                        />
-                      </div>
-                      <div class="media-caption">
-                        <span>{video.title}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div class="see-more">
-                  <a
-                    href="https://www.youtube.com/playlist?list=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="see-more-link"
-                  >
-                    See more on YouTube →
-                  </a>
-                </div>
-              </>
-            ) : (
-              <div class="coming-soon">
-                <span>Videos coming soon…</span>
-              </div>
-            )
-          }
+          <div id="youtube-media" class="media-grid">
+            <div class="coming-soon loading-placeholder">
+              <span>Loading videos…</span>
+            </div>
+          </div>
+          <div id="youtube-see-more" class="see-more" style="display:none;">
+            <a
+              href="https://www.youtube.com/@fatbatstudio"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="see-more-link"
+            >
+              See more on YouTube →
+            </a>
+          </div>
         </div>
       </section>
 
@@ -211,6 +157,56 @@ const artworkImages: ArtworkImage[] = [
       </div>
     </main>
     <Footer />
+
+    <script>
+      (async function loadYouTubeMedia() {
+        const container = document.getElementById("youtube-media");
+        const seeMore = document.getElementById("youtube-see-more");
+        if (!container) return;
+
+        try {
+          const res = await fetch(
+            "https://www.youtube.com/feeds/videos.xml?channel_id=UCLo_cJHih7tCTnAn28sIlxg"
+          );
+          const xml = await res.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(xml, "text/xml");
+          const entries = Array.from(doc.querySelectorAll("entry")).slice(0, 3);
+
+          if (entries.length === 0) {
+            container.innerHTML =
+              '<div class="coming-soon"><span>No videos found</span></div>';
+            return;
+          }
+
+          container.innerHTML = entries
+            .map((entry) => {
+              const videoId = entry.querySelector("videoId")?.textContent ?? "";
+              const title = entry.querySelector("title")?.textContent ?? "";
+              return (
+                '<div class="media-card video-card">' +
+                '<div class="video-wrapper">' +
+                '<iframe src="https://www.youtube-nocookie.com/embed/' +
+                videoId +
+                '" title="' +
+                title.replace(/"/g, "&quot;") +
+                '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>' +
+                "</div>" +
+                '<div class="media-caption"><span>' +
+                title.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
+                "</span></div></div>"
+              );
+            })
+            .join("");
+
+          if (seeMore) seeMore.style.display = "";
+        } catch (e) {
+          console.error("YouTube feed error:", e);
+          container.innerHTML =
+            '<div class="coming-soon"><span>Failed to load videos</span></div>';
+        }
+      })();
+    </script>
 
     <script define:vars={{ artworkImages: artworkImages.map(a => ({ src: a.image.src, alt: a.alt, title: a.title })) }}>
       document.addEventListener('DOMContentLoaded', () => {
@@ -728,7 +724,6 @@ const artworkImages: ArtworkImage[] = [
     font-size: 0.9rem;
     color: #e8157a;
     letter-spacing: 0.1em;
-    text-transform: uppercase;
     text-decoration: none;
     padding: 0.75rem 1.5rem;
     border: 1px solid #e8157a;
