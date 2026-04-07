@@ -246,6 +246,7 @@ const posts = (await getCollection("blog"))
                           width={600}
                           class="devlog-thumb-img"
                           loading="lazy"
+                          style={post.data.heroImagePosition ? `object-position: ${post.data.heroImagePosition}` : undefined}
                         />
                       </div>
                     )}
@@ -863,11 +864,13 @@ const posts = (await getCollection("blog"))
   .devlog-thumb {
     margin-bottom: 1.25rem;
     overflow: hidden;
+    aspect-ratio: 2 / 1;
   }
 
   .devlog-thumb-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
   }

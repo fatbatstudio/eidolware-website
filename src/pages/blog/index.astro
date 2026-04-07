@@ -78,6 +78,7 @@ const posts = (await getCollection("blog")).sort(
                       src={post.data.heroImage}
                       alt=""
                       class="post-img"
+                      style={post.data.heroImagePosition ? `object-position: ${post.data.heroImagePosition}` : undefined}
                     />
                     <div class="post-overlay" />
                   </div>
@@ -366,11 +367,13 @@ const posts = (await getCollection("blog")).sort(
   .post-image {
     position: relative;
     overflow: hidden;
+    aspect-ratio: 2 / 1;
   }
 
   .post-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
   }
