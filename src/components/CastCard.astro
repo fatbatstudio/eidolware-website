@@ -1,0 +1,297 @@
+---
+import { Image } from "astro:assets";
+import type { CastMember } from "../data/voiceCast";
+
+interface Props {
+  member: CastMember;
+  accent?: boolean;
+}
+
+const { member, accent = true } = Astro.props;
+
+const initials = (name: string) =>
+  name
+    .replace(/\(.*?\)/g, "")
+    .replace(/["']/g, "")
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("");
+---
+
+<article class:list={["cast-card", { "no-accent": !accent }]}>
+  {
+    member.image ? (
+      <Image
+        src={member.image}
+        alt={member.name}
+        width={300}
+        height={300}
+        class="cast-photo"
+        loading="lazy"
+      />
+    ) : (
+      <div class="cast-photo cast-photo-empty" aria-hidden="true">
+        <span class="cast-initials">{initials(member.name)}</span>
+        <span class="cast-noimg">Pending Image</span>
+      </div>
+    )
+  }
+  <div class="cast-body">
+    <div class="cast-head">
+      <span class="cast-role">Voice of {member.role}</span>
+      <h3 class="cast-va">{member.name}</h3>
+    </div>
+    <p class="cast-bio">{member.bio}</p>
+    {
+      member.highlightsHtml && (
+        <p class="cast-highlights">
+          <span class="cast-label">Credit Highlights</span>{" "}
+          <Fragment set:html={member.highlightsHtml} />
+        </p>
+      )
+    }
+    {
+      member.links.length > 0 && (
+        <div class="cast-links">
+          {member.links.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer">
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .cast-card {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 2px solid #00e5c3;
+  }
+
+  .cast-card.no-accent {
+    border-left: none;
+  }
+
+  .cast-photo {
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border: 1px solid #1a1a28;
+    filter: grayscale(0.15);
+  }
+
+  .cast-photo-empty {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    filter: none;
+    border: 1px solid #1a3a38;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255, 255, 255, 0.018) 3px,
+        rgba(255, 255, 255, 0.018) 4px
+      ),
+      radial-gradient(
+        circle at 50% 42%,
+        rgba(0, 229, 195, 0.16),
+        transparent 65%
+      ),
+      linear-gradient(135deg, rgba(232, 21, 122, 0.12), transparent 55%),
+      #0a0a14;
+  }
+
+  /* masked grid */
+  .cast-photo-empty::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 229, 195, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 229, 195, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 70% at 50% 45%,
+      black 25%,
+      transparent 75%
+    );
+    mask-image: radial-gradient(
+      ellipse 70% 70% at 50% 45%,
+      black 25%,
+      transparent 75%
+    );
+  }
+
+  /* targeting-reticle corner brackets (cyan top, pink bottom) */
+  .cast-photo-empty::after {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    pointer-events: none;
+    background:
+      linear-gradient(#00e5c3, #00e5c3) 0 0 / 14px 2px no-repeat,
+      linear-gradient(#00e5c3, #00e5c3) 0 0 / 2px 14px no-repeat,
+      linear-gradient(#00e5c3, #00e5c3) 100% 0 / 14px 2px no-repeat,
+      linear-gradient(#00e5c3, #00e5c3) 100% 0 / 2px 14px no-repeat,
+      linear-gradient(#e8157a, #e8157a) 0 100% / 14px 2px no-repeat,
+      linear-gradient(#e8157a, #e8157a) 0 100% / 2px 14px no-repeat,
+      linear-gradient(#e8157a, #e8157a) 100% 100% / 14px 2px no-repeat,
+      linear-gradient(#e8157a, #e8157a) 100% 100% / 2px 14px no-repeat;
+  }
+
+  .cast-initials {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%) rotate(-14deg);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 4.5rem;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, #00e5c3, #e8157a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.4;
+  }
+
+  .cast-noimg {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    text-align: center;
+    white-space: nowrap;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #e8157a;
+    opacity: 0.75;
+  }
+
+  .cast-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cast-head {
+    margin-bottom: 1rem;
+  }
+
+  .cast-role {
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #e8157a;
+    margin-bottom: 0.35rem;
+  }
+
+  .cast-va {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    color: #fff;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .cast-bio {
+    color: #c8c8d0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .cast-highlights {
+    color: #9a9aa2;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0.9rem 0 0;
+  }
+
+  .cast-label {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #00e5c3;
+    margin-right: 0.4rem;
+  }
+
+  .cast-highlights :global(a) {
+    color: #00e5c3;
+    transition: all 0.2s ease;
+  }
+
+  .cast-highlights :global(a:hover) {
+    text-shadow: 0 0 10px rgba(0, 229, 195, 0.6);
+  }
+
+  .cast-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+  }
+
+  .cast-links a {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #00e5c3;
+    border: 1px solid #1a1a28;
+    padding: 0.35rem 0.7rem;
+    transition: all 0.2s ease;
+  }
+
+  .cast-links a:hover {
+    border-color: #00e5c3;
+    background: rgba(0, 229, 195, 0.1);
+    box-shadow: 0 0 12px rgba(0, 229, 195, 0.25);
+  }
+
+  @media (max-width: 720px) {
+    .cast-card {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cast-photo {
+      width: 110px;
+      height: 110px;
+    }
+
+    .cast-initials {
+      font-size: 3.3rem;
+    }
+
+    .cast-noimg {
+      font-size: 0.42rem;
+      letter-spacing: 0.1em;
+    }
+  }
+</style>

@@ -17,27 +17,31 @@ interface YouTubeVideo {
   title: string;
 }
 
+const decodeXml = (s: string) =>
+  s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
 let youtubeVideos: YouTubeVideo[] = [];
 try {
+  // The playlist RSS feed is a stable XML format (no consent wall, no fragile
+  // ytInitialData scraping) listing the playlist's videos in order.
   const res = await fetch(
-    "https://www.youtube.com/playlist?list=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH"
+    "https://www.youtube.com/feeds/videos.xml?playlist_id=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH"
   );
-  const html = await res.text();
-  const match = html.match(/var ytInitialData = ({.*?});<\/script>/s);
-  if (match) {
-    const data = JSON.parse(match[1]);
-    const contents =
-      data.contents?.twoColumnBrowseResultsRenderer?.tabs?.[0]?.tabRenderer
-        ?.content?.sectionListRenderer?.contents?.[0]?.itemSectionRenderer
-        ?.contents?.[0]?.playlistVideoListRenderer?.contents ?? [];
-    youtubeVideos = contents
-      .filter((c: any) => c.playlistVideoRenderer)
-      .map((c: any) => ({
-        id: c.playlistVideoRenderer.videoId as string,
-        title: (c.playlistVideoRenderer.title?.runs?.[0]?.text ?? "") as string,
-      }))
-      .slice(0, 3);
-  }
+  const xml = await res.text();
+  // Drop the feed header (its <title> is the playlist name), keep entries.
+  const entries = xml.split("<entry>").slice(1);
+  youtubeVideos = entries
+    .slice(0, 3)
+    .map((entry) => ({
+      id: entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] ?? "",
+      title: decodeXml(entry.match(/<title>([^<]+)<\/title>/)?.[1] ?? ""),
+    }))
+    .filter((video) => video.id);
 } catch (e) {
   // Fall back to empty if fetch fails at build time
 }

@@ -5,6 +5,8 @@ import Footer from "../../components/Footer.astro";
 import Header from "../../components/Header.astro";
 import { SITE_TITLE } from "../../consts";
 import { characters } from "../../data/characters";
+import { voiceCastBySlug } from "../../data/voiceCast";
+import CastCard from "../../components/CastCard.astro";
 
 import annaImg from "../../assets/characters/anna.png";
 import susieImg from "../../assets/characters/susie.png";
@@ -34,6 +36,7 @@ export async function getStaticPaths() {
 const { character } = Astro.props;
 const isAntagonist = character.type === "antagonist";
 const charImage = charImages[character.slug];
+const voiceActor = voiceCastBySlug[character.slug];
 ---
 
 <!doctype html>
@@ -136,6 +139,15 @@ const charImage = charImages[character.slug];
                 <section class="info-section">
                   <h2>Background</h2>
                   <p>{character.background}</p>
+                </section>
+              )
+            }
+
+            {
+              voiceActor && (
+                <section class="info-section va-section">
+                  <h2>Voice Actor</h2>
+                  <CastCard member={voiceActor} accent={false} />
                 </section>
               )
             }
@@ -318,6 +330,13 @@ const charImage = charImages[character.slug];
 
   .info-section p:last-child {
     margin-bottom: 0;
+  }
+
+  /* Voice Actor card sits in its own frame, so drop the section box */
+  .va-section {
+    background: none;
+    border: none;
+    padding: 0;
   }
 
   @media (max-width: 1024px) {
