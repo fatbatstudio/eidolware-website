@@ -1,0 +1,244 @@
+---
+interface Clip {
+  label: string;
+  src: string;
+}
+
+interface Props {
+  clips: Clip[];
+}
+
+const { clips } = Astro.props;
+---
+
+<section class="info-section samples-section">
+  <h2>Voice Lines</h2>
+  <div class="samples-grid">
+    {
+      clips.map((clip, i) => (
+        <div class="sample">
+          <span class="sample-label">
+            <span class="sample-index">{String(i + 1).padStart(2, "0")}</span>
+            {clip.label}
+          </span>
+          <div class="audio-player" data-audio-player>
+            <audio preload="metadata" src={clip.src} />
+            <button
+              type="button"
+              class="ap-toggle"
+              data-toggle
+              aria-label="Play"
+            >
+              <svg class="ap-icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <svg
+                class="ap-icon-pause"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                hidden
+              >
+                <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+              </svg>
+            </button>
+            <div class="ap-track" data-track>
+              <div class="ap-track-fill" data-fill />
+            </div>
+            <span class="ap-time" data-time>0:00</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .samples-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .sample {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1rem 1.25rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 2px solid var(--cyber-cyan);
+  }
+
+  .sample-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c8c8d0;
+  }
+
+  .sample-index {
+    font-size: 0.7rem;
+    color: var(--cyber-pink);
+  }
+
+  .audio-player {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .ap-toggle {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--cyber-cyan);
+    background: rgba(0, 229, 195, 0.08);
+    color: var(--cyber-cyan);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ap-toggle:hover {
+    background: rgba(0, 229, 195, 0.18);
+    box-shadow: 0 0 12px rgba(0, 229, 195, 0.35);
+  }
+
+  .ap-toggle:focus-visible {
+    outline: 2px solid var(--cyber-cyan);
+    outline-offset: 2px;
+  }
+
+  .ap-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  .ap-track {
+    position: relative;
+    flex: 1;
+    height: 6px;
+    background: #1a1a28;
+    cursor: pointer;
+  }
+
+  .ap-track-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-pink));
+    pointer-events: none;
+  }
+
+  .ap-track::after {
+    /* widen the clickable/hover area without changing visual height */
+    content: "";
+    position: absolute;
+    inset: -10px 0;
+  }
+
+  .ap-time {
+    flex-shrink: 0;
+    min-width: 6.8em;
+    text-align: right;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: #c8c8d0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 720px) {
+    .sample {
+      padding: 0.85rem 1rem;
+    }
+  }
+</style>
+
+<script>
+  function formatTime(seconds: number): string {
+    if (!Number.isFinite(seconds)) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${String(s).padStart(2, "0")}`;
+  }
+
+  function initPlayer(root: HTMLElement) {
+    if (root.dataset.apReady === "true") return;
+    root.dataset.apReady = "true";
+
+    const audio = root.querySelector("audio") as HTMLAudioElement | null;
+    const toggle = root.querySelector("[data-toggle]") as HTMLButtonElement | null;
+    const playIcon = root.querySelector(".ap-icon-play") as SVGElement | null;
+    const pauseIcon = root.querySelector(".ap-icon-pause") as SVGElement | null;
+    const track = root.querySelector("[data-track]") as HTMLElement | null;
+    const fill = root.querySelector("[data-fill]") as HTMLElement | null;
+    const timeEl = root.querySelector("[data-time]") as HTMLElement | null;
+
+    if (!audio || !toggle || !track || !fill || !timeEl) return;
+
+    const setIcon = (playing: boolean) => {
+      playIcon?.toggleAttribute("hidden", playing);
+      pauseIcon?.toggleAttribute("hidden", !playing);
+      toggle.setAttribute("aria-label", playing ? "Pause" : "Play");
+    };
+
+    const updateTime = () => {
+      timeEl.textContent = `${formatTime(audio.currentTime)} / ${formatTime(
+        audio.duration,
+      )}`;
+      const pct = audio.duration
+        ? (audio.currentTime / audio.duration) * 100
+        : 0;
+      fill.style.width = `${pct}%`;
+    };
+
+    toggle.addEventListener("click", () => {
+      if (audio.paused) {
+        // Pause any other players that are running.
+        document.querySelectorAll("audio").forEach((other) => {
+          if (other !== audio) other.pause();
+        });
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener("play", () => setIcon(true));
+    audio.addEventListener("pause", () => setIcon(false));
+    audio.addEventListener("ended", () => setIcon(false));
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateTime);
+
+    const seek = (clientX: number) => {
+      if (!audio.duration) return;
+      const rect = track.getBoundingClientRect();
+      const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+      audio.currentTime = ratio * audio.duration;
+      updateTime();
+    };
+
+    track.addEventListener("click", (e) => seek((e as MouseEvent).clientX));
+
+    updateTime();
+  }
+
+  function initAll() {
+    document
+      .querySelectorAll<HTMLElement>("[data-audio-player]")
+      .forEach(initPlayer);
+  }
+
+  initAll();
+  // Re-init on Astro view transitions, if enabled.
+  document.addEventListener("astro:page-load", initAll);
+</script>

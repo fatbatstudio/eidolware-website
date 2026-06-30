@@ -7,6 +7,7 @@ import { SITE_TITLE } from "../../consts";
 import { characters } from "../../data/characters";
 import { voiceCastBySlug } from "../../data/voiceCast";
 import CastCard from "../../components/CastCard.astro";
+import VoiceSamples from "../../components/VoiceSamples.astro";
 
 import annaImg from "../../assets/characters/anna.png";
 import susieImg from "../../assets/characters/susie.png";
@@ -15,6 +16,40 @@ import beaImg from "../../assets/characters/bea.png";
 import jWooImg from "../../assets/characters/j-woo.png";
 import mayMelodyImg from "../../assets/characters/may-melody.png";
 import jaredImg from "../../assets/characters/jared.png";
+
+// Map character slugs to the audio file prefix used in assets/audio.
+const audioPrefixBySlug: Record<string, string> = {
+  "anna-lam": "anna",
+  "susie-swanson": "susie",
+  "fedora-mask": "fedora",
+  "bea-beatrix": "bea",
+  "may-melody": "may",
+  "jared-jimenez": "jared",
+};
+
+const audioFiles = import.meta.glob("../../assets/audio/*.mp3", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+
+// Title for each clip, in file order (_1, _2, ...). Describes the line itself.
+const clipTitlesBySlug: Record<string, string[]> = {
+  "anna-lam": ["Something that belongs to me", "Vinyl figures"],
+  "susie-swanson": [
+    "As a professional cosplay maker...",
+    "Fedora Mask gets weird requests all the time",
+  ],
+  "fedora-mask": [
+    "Fedora Mask, Paladin, Lvl 20",
+    "Whatever the hell he was saying",
+  ],
+  "bea-beatrix": [
+    "Who's ready for some constructive criticism?",
+    "I like that...",
+  ],
+  "may-melody": ["Just arrived at FedoraCon", "Charm Boxx surprise"],
+  "jared-jimenez": ["What's a Chiibo?", "A warm tingle behind the eyes"],
+};
 
 const charImages: Record<string, ImageMetadata> = {
   "anna-lam": annaImg,
@@ -37,6 +72,22 @@ const { character } = Astro.props;
 const isAntagonist = character.type === "antagonist";
 const charImage = charImages[character.slug];
 const voiceActor = voiceCastBySlug[character.slug];
+
+const audioPrefix = audioPrefixBySlug[character.slug];
+const voiceClips = audioPrefix
+  ? Object.keys(audioFiles)
+      .filter((path) => {
+        const file = path.split("/").pop() ?? "";
+        return file.startsWith(`${audioPrefix}_`);
+      })
+      .sort()
+      .map((path, i) => ({
+        label:
+          clipTitlesBySlug[character.slug]?.[i] ??
+          `${character.name} — Dialogue`,
+        src: audioFiles[path],
+      }))
+  : [];
 ---
 
 <!doctype html>
@@ -142,6 +193,8 @@ const voiceActor = voiceCastBySlug[character.slug];
                 </section>
               )
             }
+
+            {voiceClips.length > 0 && <VoiceSamples clips={voiceClips} />}
 
             {
               voiceActor && (
