@@ -30,7 +30,7 @@ export const characters: Character[] = [
       "When her mentor dies under suspicious circumstances, former AI engineer Anna Lam descends into FedoraCon, a bizarre 24-hour anime convention, searching for answers.",
     image: null,
     type: "protagonist",
-    bio: "A former AI engineer, Anna Lam is investigating her mentor's suspicious death. Her only lead is the Failsafe, a device she built that's reacting to something she and her mentor created years ago. The signal traces to FedoraCon, a permanent underground anime convention powered by experimental holographic technology.\n\nStepping into this unfamiliar world of cosplayers, influencers, and convention culture, Anna must navigate bizarre challenges and eccentric personalities to uncover what really happened and what her mentor left behind.",
+    bio: "A former AI engineer, Anna Lam is investigating her mentor's suspicious death. Her only lead is the Harness, a device she built that's reacting to something she and her mentor created years ago. The signal traces to FedoraCon, a permanent underground anime convention powered by experimental holographic technology.\n\nStepping into this unfamiliar world of cosplayers, influencers, and convention culture, Anna must navigate bizarre challenges and eccentric personalities to uncover what really happened and what her mentor left behind.",
   },
   {
     name: "Susie Swanson",
