@@ -11,39 +11,57 @@ import beaImg from "../assets/characters/bea.png";
 import jWooImg from "../assets/characters/j-woo.png";
 import fedoraMaskImg from "../assets/characters/fedora-mask.png";
 
-// Fetch 3 most recent videos from the YouTube playlist at build time
+// Fetch the 3 most recent videos from the YouTube playlist at build time.
+// YouTube retired the playlist RSS feed (videos.xml?playlist_id=… now 404s),
+// so we parse the public playlist page's embedded ytInitialData instead. Each
+// video is a `lockupViewModel` carrying the videoId (`contentId`) and title,
+// listed in playlist order.
 interface YouTubeVideo {
   id: string;
   title: string;
 }
 
-const decodeXml = (s: string) =>
-  s
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
+// Titles arrive as JSON string fragments; unescape \uXXXX / escaped chars.
+const decodeJsonString = (s: string) => {
+  try {
+    return JSON.parse(`"${s}"`);
+  } catch {
+    return s;
+  }
+};
 
 let youtubeVideos: YouTubeVideo[] = [];
 try {
-  // The playlist RSS feed is a stable XML format (no consent wall, no fragile
-  // ytInitialData scraping) listing the playlist's videos in order.
   const res = await fetch(
-    "https://www.youtube.com/feeds/videos.xml?playlist_id=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH"
+    "https://www.youtube.com/playlist?list=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH",
+    {
+      headers: {
+        // Desktop UA + English locale + consent cookies keep YouTube from
+        // serving the mobile/consent variants that omit the embedded video
+        // data (notably from datacenter build IPs like GitHub Actions).
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        Cookie: "CONSENT=YES+cb; SOCS=CAI",
+      },
+    }
   );
-  const xml = await res.text();
-  // Drop the feed header (its <title> is the playlist name), keep entries.
-  const entries = xml.split("<entry>").slice(1);
-  youtubeVideos = entries
-    .slice(0, 3)
-    .map((entry) => ({
-      id: entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] ?? "",
-      title: decodeXml(entry.match(/<title>([^<]+)<\/title>/)?.[1] ?? ""),
+  const html = await res.text();
+  youtubeVideos = html
+    .split('"lockupViewModel":')
+    .slice(1)
+    .map((chunk) => ({
+      id: chunk.match(/"contentId":"([A-Za-z0-9_-]{11})"/)?.[1] ?? "",
+      title: decodeJsonString(
+        chunk.match(
+          /"lockupMetadataViewModel":\{"title":\{"content":"((?:[^"\\]|\\.)*)"/
+        )?.[1] ?? ""
+      ),
     }))
-    .filter((video) => video.id);
+    .filter((video) => video.id)
+    .slice(0, 3);
 } catch (e) {
-  // Fall back to empty if fetch fails at build time
+  // Fall back to the "coming soon" state if the fetch/parse fails at build time.
 }
 
 // Artwork images
