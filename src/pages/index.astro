@@ -35,10 +35,7 @@ const posts = (await getCollection("blog"))
           <div class="hero-top-bar">
             <span class="bar-label">FATBAT Studio //</span>
             <span class="bar-jp">ファットバット</span>
-            <span class="bar-status">
-              <span class="pulse"></span>
-              ACTIVE DEV
-            </span>
+            <span class="bar-status"><span class="bar-slash">//</span> IN DEVELOPMENT</span>
           </div>
 
           <div class="hero-center">
@@ -390,22 +387,9 @@ const posts = (await getCollection("blog"))
     color: #8585a0;
   }
 
-  .pulse {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #00e5c3;
-    animation: pulse-anim 2s infinite;
-  }
-
-  @keyframes pulse-anim {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.2;
-    }
+  .bar-slash {
+    color: #00e5c3;
+    margin-right: 0.25em;
   }
 
   .hero-center {
