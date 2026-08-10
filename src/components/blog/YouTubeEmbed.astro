@@ -1,0 +1,31 @@
+---
+interface Props {
+  id: string;
+  title?: string;
+  caption?: string;
+}
+
+const { id, title = "YouTube video player", caption = "" } = Astro.props;
+---
+
+<figure class="blog-video blog-youtube">
+  <iframe
+    src={`https://www.youtube-nocookie.com/embed/${id}`}
+    title={title}
+    loading="lazy"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .blog-youtube iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 1px solid var(--cyber-gray-light);
+    background: #000;
+  }
+</style>

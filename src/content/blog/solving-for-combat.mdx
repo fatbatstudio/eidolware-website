@@ -1,0 +1,166 @@
+---
+title: "Solving for Combat & The Emberjack Dilemma"
+description: "An enemy that looked perfect on paper turned out to be miserable to fight. Fixing it meant figuring out what EIDOLWARE's combat is actually for."
+pubDate: "Aug 09 2026"
+heroImage: "../../assets/blog/solving-for-combat/thumbnail.png"
+---
+
+import BlogImage from "../../components/blog/BlogImage.astro";
+import VideoPlayer from "../../components/blog/VideoPlayer.astro";
+import MediaRow from "../../components/blog/MediaRow.astro";
+import CenteredMedia from "../../components/blog/CenteredMedia.astro";
+import YouTubeEmbed from "../../components/blog/YouTubeEmbed.astro";
+
+import emberjackGif from "../../assets/blog/solving-for-combat/Emberjack..gif";
+import crosscodeGif from "../../assets/blog/solving-for-combat/crosscode.gif";
+import terranigmaVideo from "../../assets/blog/solving-for-combat/terranigma.mp4";
+import annaToolkitVideo from "../../assets/blog/solving-for-combat/anna_toolkit.mp4";
+import emberChargeVideo from "../../assets/blog/solving-for-combat/ember_charge.mp4";
+import susieProxyVideo from "../../assets/blog/solving-for-combat/susie_proxy.mp4";
+
+A few weeks ago I designed and built an enemy that sounded perfect on paper, but playtesting showed me the design was completely wrong.
+
+That enemy is called the Emberjack, one of Bea Beatrix's creations for the Haunted Woods experience in the convention. It's a Jack-O-Lantern with a cloak surrounding a glowing orb, an elite enemy that's meant to pressure the player, blazing trails of fire along the way.
+
+<CenteredMedia small>
+  <figure class="blog-image">
+    <img
+      src={emberjackGif.src}
+      alt="The Emberjack"
+      style="width: 512px; max-width: 100%; image-rendering: pixelated;"
+    />
+    <figcaption>The Emberjack</figcaption>
+  </figure>
+</CenteredMedia>
+
+To explain why it needed fixing and how I addressed it, I have to explain how EIDOLWARE's combat works, and what I think it's *for*. Because the fix wasn't a couple of number changes. It was discovering and honing in on the game's core combat philosophy.
+
+## What Other Games Taught Me
+
+<MediaRow>
+  <figure class="blog-video">
+    <video
+      autoplay
+      loop
+      muted
+      playsinline
+      style="aspect-ratio: 342 / 231; object-fit: cover; object-position: top;"
+    >
+      <source src={terranigmaVideo} type="video/mp4" />
+    </video>
+    <figcaption>
+      Terranigma. Source: <a href="https://www.fantasyanime.com/">FantasyAnime</a>
+    </figcaption>
+  </figure>
+  <figure class="blog-image">
+    <img
+      src={crosscodeGif.src}
+      alt="CrossCode combat"
+      style="image-rendering: pixelated;"
+    />
+    <figcaption>
+      CrossCode. Source: <a href="https://www.radicalfishgames.com/">Radical Fish Games</a>
+    </figcaption>
+  </figure>
+</MediaRow>
+
+EIDOLWARE's combat is inspired by 2D action-RPGs of the Super Nintendo and early PlayStation era and recent games that were also inspired by it.
+
+Terranigma (released 1995 by Quintet, part of the Soul Blazer series) is a big influence for me. When I was a teenager, I played the game on an emulator because outside of Japan it only released in Europe and not North America. The game's encounters and boss fights might seem archaic these days, but the player's moveset was extremely flexible.
+
+The main character, Ark, wielded a spear. Aside from your regular attacks, if you spammed the attack button your character would execute a "rushing" flurry attack. If you ran, jumped and pressed attack your character would perform a "slider" attack which made you slide dive into crowds of enemies. Along with other moves, every hit felt like it had weight.
+
+That tactile quality is something I've been chasing in other games, and wanted to incorporate in my own.
+
+A more modern take on the genre taught me something different. CrossCode (2018, by RadicalFish) has enemies that have tricks. That game has an enemy called the Heat Virus that's nearly invincible on its own. It doesn't attack you directly. Instead it empowers nearby neutral viruses with fire and sends them charging at you.
+
+You can try to dodge and chip away, but the real answer is to hit one of those empowered viruses with a Cold attack, which flips it into a floating anti-virus you can shove back into the Heat Virus to break its shield. It's an interesting enemy that encourages element counters and causes the player to stop flailing and start thinking. Thinking turns into executing, and when done right in a game, executing feels incredible.
+
+For EIDOLWARE, I wanted both of those things. The weight and momentum of Terranigma, the readability of CrossCode. And somewhere in pursuing both, a principle emerged that I didn't fully articulate until much later: **enemies should be problems to solve, not walls to grind.** The player should win because they understood something, not because their numbers got bigger.
+
+That sounds obvious when you say it out loud. It turns out to be surprisingly challenging to actually build. It got even more challenging when I threw another game genre influence into the mix.
+
+## Anna's Toolkit
+
+<CenteredMedia>
+  <VideoPlayer src={annaToolkitVideo} alt="Anna's moveset in action" />
+</CenteredMedia>
+
+In the story of EIDOLWARE, Anna Lam is an AI engineer. The way she conducts herself and interacts with others should reflect that. She asks specific questions, notices when systems don't behave the way they're supposed to, and pokes at things until they make sense. If the combat doesn't reflect that, the game is asking you to be someone Anna isn't.
+
+So Anna's moveset is built like a toolkit. Her attacks are short and fast, because in a game where threats come from every direction, the ability to reposition is sacred. That's something Terranigma understood. Ark's attacks are quick, committed for only a few frames, and the game rarely locks you out of moving. In a top-down game where enemies come from any angle, that kind of low-commitment action is what makes combat feel responsive instead of sluggish. Anna follows the same principle. She should almost never feel locked out of moving.
+
+But speed alone isn't the point. What matters more is that her moves interact with the world in useful ways. A dash attack does damage, sure, but it also shoves enemies. And the shove is where the interesting part starts. Knock a skeleton into a fire and it ignites. Knock a bomb bat into a crowd of skeletons and things get loud. The moveset isn't a list of damage buttons. It's a set of tools for manipulating the room. Each ability does an obvious thing, but the real design is in making them *useful*.
+
+This is the principle at work: encounters should invite experimentation, and experiments should pay off. When the player figures out how something works, the fight should change because they understand it. This also encourages aggressive gameplay because the player is more open to seeing what happens.
+
+## The Survivor-Like Question
+
+Here's where things get complicated, because EIDOLWARE also borrows from a genre that doesn't share this philosophy at all.
+
+Vampire Survivors and its descendants (MEGABONK, etc) figured out something real: there is a specific joy in being one small person against a tide, watching pressure build and carving order out of chaos. It makes perfect sense for the setting of EIDOLWARE: an anime convention powered by holograms where anyone could live out their power fantasies.
+
+In that genre, I loved that feeling of controlling chaos and wanted to include that element in the game.
+
+But survivor-likes are fundamentally games about builds. Your character attacks automatically, your decisions happen in upgrade menus between runs, and by the endgame you're mostly watching your own math play out. That's a legitimate design, but it's the opposite of what I described above. Anna's combat is manual, deliberate, and moment-to-moment. If I imported the genre wholesale, I'd undermine everything the moveset is built to do.
+
+So EIDOLWARE has SURVIVE encounters, and they deliver the horde pressure that makes the genre exciting, but they sit in a very specific place in the game's structure. SURVIVE encounters are placed between traditional exploration zones and fine-tuned boss rooms. They're meant to be a high-pressure capstone that blends together enemy encounters and mechanics the player has already learned. They're not the baseline experience, but add needed tension points to the game. Think of them as a pop quiz for a chapter: everything the player has learned, all at once, under pressure.
+
+The key difference is that the horde is made of the same readable, solvable enemies the player has already been learning. That distinction matters, because it's what let me build the Emberjack.
+
+## The Emberjack, Version 1
+
+The Emberjack is a Halloween-themed elite designed for SURVIVE arenas. It stalks the player, drops a trail of fire behind it, and periodically charges. The trail denies space, and any enemy knocked by the player into the flames catches fire and spreads it to nearby fodder. On paper, this is everything the philosophy asks for. It's a system with interactions to discover and should reward experimentation.
+
+In practice, version 1 was miserable to fight against.
+
+The design intent for the Emberjack was to punish the player for staying in one spot for too long, and the enemy did deliver on that intent. However, it delivered that every five seconds, forever. Between the charge trail, the walking trail, and a skeleton horde filling the arena, playtests showed fifteen to twenty standing flames at all times. It was relentless. And the revealing part wasn't that the player died often to it. It was what it did to the player's *behavior*. They stopped playing aggressively and just backed off, kiting in circles, trying to survive rather than engage and learn. The opposite of everything I just spent this post describing.
+
+I tried the obvious dials. Turn skeleton density down, but the horde excitement disappears. Turn it up and the player drowns. I adjusted fire lifetime, charge frequency, damage numbers. No combination fixed it, because the problem wasn't in the numbers.
+
+## Weather vs. Puzzles
+
+It turned out the big issue was the Emberjack had no rhythm.
+
+Constant, uninterrupted threat doesn't read as pressure. It reads like the weather. And you can't solve weather. You can only endure through it. The knock-enemies-into-fire mechanic was sitting right there for the player to find, exactly the kind of interaction the combat philosophy is built around, but nobody could discover it because they were too busy running away. A problem the player never gets space to examine isn't a puzzle.
+
+Once I had that framing, the fixes weren't hard to find. They all followed from the same idea: give the player a rhythm. Give them a window of time to breathe and observe, then use future windows to punish the enemy.
+
+After every charge the Emberjack now enters a "discharged" state. For a couple seconds it slows to a crawl, producing no fire, completely harmless. The cycle went from five seconds of constant threat to roughly eight seconds with a clear punish window built in. Dodge, punish, reposition. The player now has that moment to breathe.
+
+The Emberjack is now a slow, visible presence between charges, and the only question the player has to read is: is the charge ready? The answer is legible, too. Its core light dims while it's discharged and relights exactly when the next charge is armed, and it laughs for a full second before launching, so the telegraph is visual and audible.
+
+## The Enemy That Teaches Itself
+
+<CenteredMedia>
+  <VideoPlayer
+    src={emberChargeVideo}
+    alt="The Emberjack's charge plowing fodder into its own fire trail"
+  />
+</CenteredMedia>
+
+My favorite fix is the one that made the Emberjack feel like it belongs in this game.
+
+The charge now plows fodder aside. Skeletons and other enemies go flying, land in the Emberjack's own fresh fire trail, and chain-ignite. Every single charge is a live demonstration of "knocked enemies can catch fire." The enemy runs the experiment for the player, and then the player starts reenacting it on purpose.
+
+By the end of the rebalance, the Emberjack had flipped from an obstacle into a tool. In one SURVIVE level it arrives late as an announced menace with big reward for defeating it. But because the rebalanced version is genuinely useful to have around, the player faces a choice: Kill it for a big reward, or keep the fire engine running and kite its charges to help clear the horde. Same enemy, same fire, same mechanics. The fix was about giving the player a window to think, and watching them build a better solution than the one I'd planned.
+
+If you'd like to see all of this in motion, here's a full SURVIVE encounter from start to finish:
+
+<YouTubeEmbed
+  id="oaV2RbjgU6s"
+  title="EIDOLWARE — full SURVIVE encounter gameplay"
+  caption="A full SURVIVE encounter"
+/>
+
+## The Principle
+
+If the player can't examine the problem, they can't solve the problem. It becomes weather. Give them the window, and they'll discover a solution, sometimes better than the one you designed. That's EIDOLWARE's combat philosophy in one sentence.
+
+There's more to Anna's toolkit than what I've mentioned here. She doesn't fight alone, and what happens when her allies are summoned (and summoned together) brings a whole new set of moves. I'll be detailing that more in a future post.
+
+*- Ryv, FATBAT Studio*
+
+<CenteredMedia>
+  <VideoPlayer src={susieProxyVideo} alt="Susie's PROXY summon" />
+</CenteredMedia>
