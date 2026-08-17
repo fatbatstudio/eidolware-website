@@ -9,6 +9,7 @@ import { getCollection } from "astro:content";
 import eidolwareLogo from "../assets/logos/eidolware_logo.png";
 import annaSide from "../assets/characters/anna-side.png";
 import susieSide from "../assets/characters/susie-side.png";
+import allCharacters from "../assets/characters/eidolware-all-characters-web.png";
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -30,6 +31,17 @@ const posts = (await getCollection("blog"))
           <div class="glow glow-cyan"></div>
           <div class="scanlines"></div>
         </div>
+
+        <Image
+          src={allCharacters}
+          alt=""
+          width={2560}
+          height={827}
+          class="hero-characters"
+          loading="eager"
+          decoding="async"
+          aria-hidden="true"
+        />
 
         <div class="hero-inner">
           <div class="hero-top-bar">
@@ -87,7 +99,7 @@ const posts = (await getCollection("blog"))
             src={annaSide}
             alt="Anna Lam"
             width={800}
-            height={500}
+            height={300}
             class="banner-art-img"
             loading="lazy"
           />
@@ -147,7 +159,7 @@ const posts = (await getCollection("blog"))
             src={susieSide}
             alt="Susie"
             width={800}
-            height={500}
+            height={300}
             class="banner-art-img"
             loading="lazy"
           />
@@ -204,6 +216,49 @@ const posts = (await getCollection("blog"))
               through dance, a corporate-sponsored kawaii influencer, a
               conspirophile vinyl figure collector, and a masked billionaire who
               thinks he's a Level 20 Paladin.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="card-edge edge-cyan"></div>
+            <div class="feature-idx">
+              <span class="idx-num">D</span>
+              <div class="idx-line"></div>
+            </div>
+            <h3>Aggressive Combat</h3>
+            <p>
+              Fast-paced action-RPG combat that rewards aggression over caution,
+              with unique encounters, enemies you can weaponize against each
+              other, and wacky boss fights you won't see coming.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="card-edge edge-pink"></div>
+            <div class="feature-idx">
+              <span class="idx-num">E</span>
+              <div class="idx-line"></div>
+            </div>
+            <h3>PROXY System</h3>
+            <p>
+              Summon allies to aid you mid-combat, then mix and match multiple
+              summons to combine their abilities into devastating new team
+              attacks.
+            </p>
+          </div>
+          <div class="feature">
+            <div class="card-edge edge-cyan"></div>
+            <div class="feature-idx">
+              <span class="idx-num">F</span>
+              <div class="idx-line"></div>
+            </div>
+            <h3>Voice &amp; Sound</h3>
+            <p>
+              Fully voiced by seasoned professionals with credits in anime,
+              games, animation, and theater, plus talented newcomers, backed by
+              an original soundtrack from <a
+                href="https://www.debiscomusic.com/"
+                target="_blank"
+                rel="noopener noreferrer">DeBisco</a
+              > and other great music artists, NOT AI.
             </p>
           </div>
         </div>
@@ -337,6 +392,19 @@ const posts = (await getCollection("blog"))
       rgba(255, 255, 255, 0.008) 2px,
       rgba(255, 255, 255, 0.008) 4px
     );
+    pointer-events: none;
+  }
+
+  /* Character lineup: full-bleed, bottom flush with the pink/cyan stripe */
+  .hero-characters {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 3px;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+    opacity: 0.18;
     pointer-events: none;
   }
 
@@ -523,15 +591,16 @@ const posts = (await getCollection("blog"))
   }
 
   .btn-cyan {
-    background: transparent;
+    background: #00e5c3;
     border-color: #00e5c3;
-    color: #00e5c3;
+    color: #0a0a14;
   }
 
   .btn-cyan:hover {
-    background: rgba(0, 229, 195, 0.08);
-    box-shadow: 0 0 25px rgba(0, 229, 195, 0.25);
-    color: #00e5c3;
+    background: #2bffdc;
+    border-color: #2bffdc;
+    box-shadow: 0 0 30px rgba(0, 229, 195, 0.4);
+    color: #0a0a14;
   }
 
   .hero-stripe {
@@ -794,6 +863,16 @@ const posts = (await getCollection("blog"))
     line-height: 1.75;
     color: #9090a0;
     margin: 0;
+  }
+
+  .feature p a {
+    color: #00e5c3;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .feature p a:hover {
+    text-shadow: 0 0 10px rgba(0, 229, 195, 0.6);
   }
 
   /* Devlog */
