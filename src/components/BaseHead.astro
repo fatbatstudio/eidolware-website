@@ -29,7 +29,10 @@ const ogImageURL = new URL(ogImage.src, Astro.url);
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/png" href="/favicon.png" />
+<!-- Google requires a square favicon that's a multiple of 48px, and probes /favicon.ico directly. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32 64x64" />
+<link rel="icon" type="image/png" href="/favicon-192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="/favicon-192.png" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
   rel="alternate"
