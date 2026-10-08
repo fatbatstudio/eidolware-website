@@ -216,7 +216,7 @@ const artworkImages: ArtworkImage[] = [
                 <div class="ost-screen">
                   <div class="video-wrapper">
                     <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${ostTracks[0].id}?list=${OST_PLAYLIST_ID}`}
+                      src={`https://www.youtube-nocookie.com/embed/${ostTracks[0].id}?list=${OST_PLAYLIST_ID}&enablejsapi=1`}
                       title={ostTracks[0].title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowfullscreen
@@ -341,22 +341,74 @@ const artworkImages: ArtworkImage[] = [
     <Footer />
 
     <script>
-      // OST tracklist: swap the player to the chosen track. Keeping `list` in
-      // the embed URL lets YouTube continue through the playlist afterwards.
-      document.querySelectorAll<HTMLElement>("[data-ost-player]").forEach((player) => {
-        const iframe = player.querySelector("iframe");
-        const tracks = player.querySelectorAll<HTMLButtonElement>(".ost-track");
+      // OST tracklist. The embed is driven through the YouTube IFrame Player
+      // API so the highlight follows playback when YouTube auto-advances (or
+      // the viewer skips inside the player), not just when a track is clicked.
+      const ytWindow = window as Window & {
+        YT?: any;
+        onYouTubeIframeAPIReady?: () => void;
+      };
+
+      const ostPlayers = document.querySelectorAll<HTMLElement>("[data-ost-player]");
+
+      ostPlayers.forEach((root) => {
+        const iframe = root.querySelector("iframe");
+        const tracks = [...root.querySelectorAll<HTMLButtonElement>(".ost-track")];
         if (!iframe) return;
+
+        let ytPlayer: any = null;
+
+        const highlight = (videoId: string | null) => {
+          const current = tracks.find((t) => t.dataset.videoId === videoId);
+          if (!current) return;
+          tracks.forEach((t) => t.setAttribute("aria-current", String(t === current)));
+          iframe.title = current.dataset.title ?? "";
+        };
+
+        // getVideoUrl() is the documented way to read the playing video's ID.
+        const syncHighlight = () => {
+          const url = ytPlayer?.getVideoUrl?.();
+          if (url) highlight(new URL(url).searchParams.get("v"));
+        };
 
         tracks.forEach((track) => {
           track.addEventListener("click", () => {
-            iframe.src = `https://www.youtube-nocookie.com/embed/${track.dataset.videoId}?list=${player.dataset.list}&autoplay=1`;
-            iframe.title = track.dataset.title ?? "";
-            tracks.forEach((t) => t.setAttribute("aria-current", "false"));
-            track.setAttribute("aria-current", "true");
+            const videoId = track.dataset.videoId ?? "";
+            highlight(videoId);
+
+            // Jump within the loaded playlist so the player stays bound to the
+            // API; fall back to reloading the embed if the API isn't ready.
+            const index = ytPlayer?.getPlaylist?.()?.indexOf(videoId) ?? -1;
+            if (index >= 0) {
+              ytPlayer.playVideoAt(index);
+            } else {
+              iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?list=${root.dataset.list}&enablejsapi=1&autoplay=1`;
+            }
           });
         });
+
+        const bindPlayer = () => {
+          ytPlayer = new ytWindow.YT.Player(iframe, {
+            events: { onReady: syncHighlight, onStateChange: syncHighlight },
+          });
+        };
+
+        if (ytWindow.YT?.Player) {
+          bindPlayer();
+        } else {
+          const previousReady = ytWindow.onYouTubeIframeAPIReady;
+          ytWindow.onYouTubeIframeAPIReady = () => {
+            previousReady?.();
+            bindPlayer();
+          };
+        }
       });
+
+      if (ostPlayers.length > 0 && !document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const api = document.createElement("script");
+        api.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(api);
+      }
     </script>
 
     <script define:vars={{ artworkImages: artworkImages.map(a => ({ src: a.image.src, alt: a.alt, title: a.title })) }}>
