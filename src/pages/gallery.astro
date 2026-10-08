@@ -11,14 +11,17 @@ import beaImg from "../assets/characters/bea.png";
 import jWooImg from "../assets/characters/j-woo.png";
 import fedoraMaskImg from "../assets/characters/fedora-mask.png";
 
-// Fetch the 3 most recent videos from the YouTube playlist at build time.
-// YouTube retired the playlist RSS feed (videos.xml?playlist_id=… now 404s),
-// so we parse the public playlist page's embedded ytInitialData instead. Each
-// video is a `lockupViewModel` carrying the videoId (`contentId`) and title,
-// listed in playlist order.
+// Fetch playlist videos at build time. YouTube retired the playlist RSS feed
+// (videos.xml?playlist_id=… now 404s), so we parse the public playlist page's
+// embedded ytInitialData instead. Each video is a `lockupViewModel` carrying
+// the videoId (`contentId`), title and duration, listed in playlist order.
+const MEDIA_PLAYLIST_ID = "PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH";
+const OST_PLAYLIST_ID = "PLxklI-nMsXpxigBqyD7TXMZ9XAvOYVW1c";
+
 interface YouTubeVideo {
   id: string;
   title: string;
+  duration: string;
 }
 
 // Titles arrive as JSON string fragments; unescape \uXXXX / escaped chars.
@@ -30,11 +33,9 @@ const decodeJsonString = (s: string) => {
   }
 };
 
-let youtubeVideos: YouTubeVideo[] = [];
-try {
-  const res = await fetch(
-    "https://www.youtube.com/playlist?list=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH",
-    {
+async function fetchPlaylistVideos(playlistId: string): Promise<YouTubeVideo[]> {
+  try {
+    const res = await fetch(`https://www.youtube.com/playlist?list=${playlistId}`, {
       headers: {
         // Desktop UA + English locale + consent cookies keep YouTube from
         // serving the mobile/consent variants that omit the embedded video
@@ -44,25 +45,46 @@ try {
         "Accept-Language": "en-US,en;q=0.9",
         Cookie: "CONSENT=YES+cb; SOCS=CAI",
       },
-    }
-  );
-  const html = await res.text();
-  youtubeVideos = html
-    .split('"lockupViewModel":')
-    .slice(1)
-    .map((chunk) => ({
-      id: chunk.match(/"contentId":"([A-Za-z0-9_-]{11})"/)?.[1] ?? "",
-      title: decodeJsonString(
-        chunk.match(
-          /"lockupMetadataViewModel":\{"title":\{"content":"((?:[^"\\]|\\.)*)"/
-        )?.[1] ?? ""
-      ),
-    }))
-    .filter((video) => video.id)
-    .slice(0, 3);
-} catch (e) {
-  // Fall back to the "coming soon" state if the fetch/parse fails at build time.
+    });
+    const html = await res.text();
+    return html
+      .split('"lockupViewModel":')
+      .slice(1)
+      .map((chunk) => ({
+        id: chunk.match(/"contentId":"([A-Za-z0-9_-]{11})"/)?.[1] ?? "",
+        title: decodeJsonString(
+          chunk.match(
+            /"lockupMetadataViewModel":\{"title":\{"content":"((?:[^"\\]|\\.)*)"/
+          )?.[1] ?? ""
+        ),
+        duration: chunk.match(/"text":"(\d+:\d{2}(?::\d{2})?)"/)?.[1] ?? "",
+      }))
+      .filter((video) => video.id);
+  } catch (e) {
+    // Callers fall back to an empty/embed state if the fetch/parse fails.
+    return [];
+  }
 }
+
+// Media shows the 3 most recent videos.
+const youtubeVideos = (await fetchPlaylistVideos(MEDIA_PLAYLIST_ID)).slice(0, 3);
+
+// OST titles look like "EIDOLWARE OST: Track Name (Context) by Artist";
+// split them into a track name and artist for the tracklist.
+interface OstTrack extends YouTubeVideo {
+  name: string;
+  artist: string;
+}
+
+const ostTracks: OstTrack[] = (await fetchPlaylistVideos(OST_PLAYLIST_ID)).map((video) => {
+  const base = video.title.replace(/^.*?\bOST:\s*/i, "");
+  const byIndex = base.lastIndexOf(" by ");
+  return {
+    ...video,
+    name: byIndex > 0 ? base.slice(0, byIndex) : base,
+    artist: byIndex > 0 ? base.slice(byIndex + 4) : "",
+  };
+});
 
 // Artwork images
 interface ArtworkImage {
@@ -84,7 +106,7 @@ const artworkImages: ArtworkImage[] = [
   <head>
     <BaseHead
       title={`Gallery - ${SITE_TITLE}`}
-      description="Gameplay footage and artwork from EIDOLWARE"
+      description="Gameplay footage, original soundtrack, and artwork from EIDOLWARE"
     />
   </head>
   <body>
@@ -156,7 +178,7 @@ const artworkImages: ArtworkImage[] = [
                 </div>
                 <div class="see-more">
                   <a
-                    href="https://www.youtube.com/playlist?list=PLxklI-nMsXpyVxaWelmNs7bZtEuDLNslH"
+                    href={`https://www.youtube.com/playlist?list=${MEDIA_PLAYLIST_ID}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="see-more-link"
@@ -174,11 +196,93 @@ const artworkImages: ArtworkImage[] = [
         </div>
       </section>
 
-      <!-- Artwork Section -->
+      <!-- Original Soundtrack Section -->
       <section class="content-section">
         <div class="section-head">
           <div class="num-block num-cyan">
             <span class="num">02</span>
+          </div>
+          <div class="head-text">
+            <span class="head-jp">オリジナルサウンドトラック</span>
+            <h2 class="head-title">Original Soundtrack</h2>
+          </div>
+          <div class="head-rule"></div>
+        </div>
+
+        <div class="section-body">
+          {
+            ostTracks.length > 0 ? (
+              <div class="ost-player" data-ost-player data-list={OST_PLAYLIST_ID}>
+                <div class="ost-screen">
+                  <div class="video-wrapper">
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${ostTracks[0].id}?list=${OST_PLAYLIST_ID}`}
+                      title={ostTracks[0].title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+                <div class="ost-tracklist">
+                  <div class="ost-tracklist-head">
+                    <span>Tracklist</span>
+                    <span>{String(ostTracks.length).padStart(2, "0")} Tracks</span>
+                  </div>
+                  <ol class="ost-tracks">
+                    {ostTracks.map((track, index) => (
+                      <li>
+                        <button
+                          class="ost-track"
+                          type="button"
+                          data-video-id={track.id}
+                          data-title={track.title}
+                          aria-current={index === 0 ? "true" : "false"}
+                        >
+                          <span class="ost-track-num">{String(index + 1).padStart(2, "0")}</span>
+                          <span class="ost-track-info">
+                            <span class="ost-track-name">{track.name}</span>
+                            {track.artist && <span class="ost-track-artist">{track.artist}</span>}
+                          </span>
+                          {track.duration && <span class="ost-track-time">{track.duration}</span>}
+                        </button>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            ) : (
+              <div class="ost-player ost-player-fallback">
+                <div class="video-wrapper">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/videoseries?list=${OST_PLAYLIST_ID}`}
+                    title="EIDOLWARE Original Soundtrack"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            )
+          }
+          <div class="see-more">
+            <a
+              href={`https://www.youtube.com/playlist?list=${OST_PLAYLIST_ID}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="see-more-link"
+            >
+              Listen on YouTube →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Artwork Section -->
+      <section class="content-section">
+        <div class="section-head">
+          <div class="num-block num-pink">
+            <span class="num">03</span>
           </div>
           <div class="head-text">
             <span class="head-jp">アートワーク</span>
@@ -235,6 +339,25 @@ const artworkImages: ArtworkImage[] = [
       </div>
     </main>
     <Footer />
+
+    <script>
+      // OST tracklist: swap the player to the chosen track. Keeping `list` in
+      // the embed URL lets YouTube continue through the playlist afterwards.
+      document.querySelectorAll<HTMLElement>("[data-ost-player]").forEach((player) => {
+        const iframe = player.querySelector("iframe");
+        const tracks = player.querySelectorAll<HTMLButtonElement>(".ost-track");
+        if (!iframe) return;
+
+        tracks.forEach((track) => {
+          track.addEventListener("click", () => {
+            iframe.src = `https://www.youtube-nocookie.com/embed/${track.dataset.videoId}?list=${player.dataset.list}&autoplay=1`;
+            iframe.title = track.dataset.title ?? "";
+            tracks.forEach((t) => t.setAttribute("aria-current", "false"));
+            track.setAttribute("aria-current", "true");
+          });
+        });
+      });
+    </script>
 
     <script define:vars={{ artworkImages: artworkImages.map(a => ({ src: a.image.src, alt: a.alt, title: a.title })) }}>
       document.addEventListener('DOMContentLoaded', () => {
@@ -738,6 +861,138 @@ const artworkImages: ArtworkImage[] = [
 
   .video-card:hover .media-img {
     transform: none;
+  }
+
+  /* OST Player */
+  .ost-player {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    border: 2px solid #00e5c3;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .ost-player-fallback {
+    display: block;
+  }
+
+  .ost-screen {
+    align-self: start;
+  }
+
+  .ost-tracklist {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #1a1a28;
+    min-height: 0;
+  }
+
+  .ost-tracklist-head {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #1a1a28;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #8585a0;
+  }
+
+  .ost-tracklist-head span:first-child {
+    color: #e8157a;
+  }
+
+  .ost-tracks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 420px;
+  }
+
+  .ost-track {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #12121e;
+    border-left: 3px solid transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .ost-track:hover {
+    background: rgba(0, 229, 195, 0.06);
+  }
+
+  .ost-track:focus-visible {
+    outline: 1px solid #00e5c3;
+    outline-offset: -1px;
+  }
+
+  .ost-track[aria-current="true"] {
+    background: rgba(232, 21, 122, 0.1);
+    border-left-color: #e8157a;
+  }
+
+  .ost-track-num {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: #8585a0;
+    flex-shrink: 0;
+  }
+
+  .ost-track[aria-current="true"] .ost-track-num {
+    color: #e8157a;
+  }
+
+  .ost-track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ost-track-name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .ost-track[aria-current="true"] .ost-track-name {
+    color: #00e5c3;
+  }
+
+  .ost-track-artist {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: #8585a0;
+  }
+
+  .ost-track-time {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    color: #8585a0;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 960px) {
+    .ost-player {
+      grid-template-columns: 1fr;
+    }
+
+    .ost-tracklist {
+      border-left: none;
+      border-top: 1px solid #1a1a28;
+    }
   }
 
   /* See More Link */
